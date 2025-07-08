@@ -1,0 +1,110 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Cinemas {
+  id         Int       @id @default(autoincrement())
+  name       String
+  location   String
+  created_at DateTime  @default(now())
+  updated_at DateTime?
+  deleted_at DateTime?
+  rooms      Rooms[]
+
+  @@map("cinemas")
+}
+
+model Movies {
+  id             Int                 @id @default(autoincrement())
+  name           String
+  synopsis       String              @db.LongText
+  duration       String
+  classification MovieClassification
+  created_at     DateTime            @default(now())
+  updated_at     DateTime?
+  deleted_at     DateTime?
+  sessions       Sessions?
+
+  @@map("movies")
+}
+
+model Sessions {
+  id           Int            @id @default(autoincrement())
+  movie_id     Int            @unique
+  room_id      Int
+  starts_at    DateTime
+  ends_at      DateTime
+  created_at   DateTime       @default(now())
+  updated_at   DateTime?
+  deleted_at   DateTime?
+  room         Rooms          @relation(fields: [room_id], references: [id])
+  movie        Movies         @relation(fields: [movie_id], references: [id])
+  session_seats SessionSeats[]
+
+  @@map("sessions")
+}
+
+model Rooms {
+  id         Int        @id @default(autoincrement())
+  name       String
+  cinema_id  Int
+  created_at DateTime   @default(now())
+  updated_at DateTime?
+  deleted_at DateTime?
+  cinema     Cinemas    @relation(fields: [cinema_id], references: [id])
+  rows       Rows[]
+  Sessions   Sessions[]
+
+  @@map("rooms")
+}
+
+model Rows {
+  id         Int       @id @default(autoincrement())
+  room_id    Int
+  row_label  String    @db.Char(1)
+  created_at DateTime  @default(now())
+  updated_at DateTime?
+  deleted_at DateTime?
+  room       Rooms     @relation(fields: [room_id], references: [id])
+  seats      Seats[]
+
+  @@map("rows")
+}
+
+model Seats {
+  id            Int            @id @default(autoincrement())
+  row_id        Int
+  seat_number   Int
+  is_accessible Boolean        @default(false)
+  created_at    DateTime       @default(now())
+  updated_at    DateTime?
+  deleted_at    DateTime?
+  row           Rows           @relation(fields: [row_id], references: [id])
+  session_seats  SessionSeats[]
+
+  @@map("seats")
+}
+
+model SessionSeats {
+  id          Int       @id @default(autoincrement())
+  session_id  Int
+  seat_id     Int
+  is_reserved Boolean
+  created_at  DateTime  @default(now())
+  updated_at  DateTime?
+  deleted_at  DateTime?
+  session     Sessions  @relation(fields: [session_id], references: [id])
+  seat        Seats     @relation(fields: [seat_id], references: [id])
+
+  @@map("session_seats")
+}
+
+enum MovieClassification {
+  FREE
+  PLUS18
+}

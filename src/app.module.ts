@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
+import { CinemasModule } from './modules/cinemas/cinemas.module';
 
 @Module({
-  imports: [],
+  imports: [CinemasModule],
   controllers: [],
   providers: [],
 })
