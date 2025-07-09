@@ -34,16 +34,16 @@ model Movies {
 }
 
 model Sessions {
-  id           Int            @id @default(autoincrement())
-  movie_id     Int            @unique
-  room_id      Int
-  starts_at    DateTime
-  ends_at      DateTime
-  created_at   DateTime       @default(now())
-  updated_at   DateTime?
-  deleted_at   DateTime?
-  room         Rooms          @relation(fields: [room_id], references: [id])
-  movie        Movies         @relation(fields: [movie_id], references: [id])
+  id            Int            @id @default(autoincrement())
+  movie_id      Int            @unique
+  room_id       Int
+  starts_at     DateTime
+  ends_at       DateTime
+  created_at    DateTime       @default(now())
+  updated_at    DateTime?
+  deleted_at    DateTime?
+  room          Rooms          @relation(fields: [room_id], references: [id])
+  movie         Movies         @relation(fields: [movie_id], references: [id])
   session_seats SessionSeats[]
 
   @@map("sessions")
@@ -57,13 +57,13 @@ model Rooms {
   updated_at DateTime?
   deleted_at DateTime?
   cinema     Cinemas    @relation(fields: [cinema_id], references: [id])
-  rows       Rows[]
-  Sessions   Sessions[]
+  rows       RowsRoom[]
+  sessions   Sessions[]
 
   @@map("rooms")
 }
 
-model Rows {
+model RowsRoom {
   id         Int       @id @default(autoincrement())
   room_id    Int
   row_label  String    @db.Char(1)
@@ -73,7 +73,7 @@ model Rows {
   room       Rooms     @relation(fields: [room_id], references: [id])
   seats      Seats[]
 
-  @@map("rows")
+  @@map("rows_room")
 }
 
 model Seats {
@@ -84,8 +84,8 @@ model Seats {
   created_at    DateTime       @default(now())
   updated_at    DateTime?
   deleted_at    DateTime?
-  row           Rows           @relation(fields: [row_id], references: [id])
-  session_seats  SessionSeats[]
+  row           RowsRoom       @relation(fields: [row_id], references: [id])
+  session_seats SessionSeats[]
 
   @@map("seats")
 }
