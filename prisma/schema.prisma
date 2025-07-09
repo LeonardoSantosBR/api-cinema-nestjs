@@ -23,6 +23,7 @@ model Movies {
   id             Int                 @id @default(autoincrement())
   name           String
   synopsis       String              @db.LongText
+  in_theaters    Boolean             @default(false)
   duration       String
   classification MovieClassification
   created_at     DateTime            @default(now())
