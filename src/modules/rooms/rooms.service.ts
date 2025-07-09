@@ -22,23 +22,25 @@ export class RoomsService {
       });
       for (const r of rows) {
         const { seats, row_label } = r;
-        const new_row = await tr.rowsRoom.create({
-          data: {
-            room: {
-              connect: {
-                id: new_room.id,
-              },
+        const rowsCreate: Prisma.RowsRoomCreateInput = {
+          room: {
+            connect: {
+              id: new_room.id,
             },
-            row_label,
           },
+          row_label,
+        };
+        const new_row = await tr.rowsRoom.create({
+          data: rowsCreate,
         });
         await tr.seats.createMany({
           data: seats.map((st) => {
-            return {
+            const seatsCreate: Prisma.SeatsCreateManyInput = {
               row_id: new_row.id,
               seat_number: st.seat_number,
               is_accessible: st.is_accessible,
             };
+            return seatsCreate;
           }),
         });
       }
@@ -88,6 +90,7 @@ export class RoomsService {
       });
 
       const existing_row_ids = existing_rows.map((r) => r.id);
+
       const rows_to_delete = existing_row_ids.filter(
         (rid) => !row_ids_from_payload?.includes(rid),
       );
@@ -116,11 +119,14 @@ export class RoomsService {
           row_id_to_use = new_row.id;
 
           await tr.seats.createMany({
-            data: seats.map((st) => ({
-              row_id: row_id_to_use,
-              seat_number: st.seat_number,
-              is_accessible: st.is_accessible,
-            })),
+            data: seats.map((st) => {
+              const seatsCreate: Prisma.SeatsCreateManyInput = {
+                row_id: new_row.id,
+                seat_number: st.seat_number,
+                is_accessible: st.is_accessible,
+              };
+              return seatsCreate;
+            }),
           });
         } else {
           await tr.rowsRoom.update({
@@ -129,15 +135,16 @@ export class RoomsService {
           });
 
           for (const st of seats) {
+            const seatUpdate: Prisma.SeatsUpdateInput = {
+              seat_number: st.seat_number,
+              is_accessible: st.is_accessible,
+            };
             if (st.seat_id)
               await tr.seats.update({
                 where: {
                   id: st.seat_id,
                 },
-                data: {
-                  seat_number: st.seat_number,
-                  is_accessible: st.is_accessible,
-                },
+                data: seatUpdate,
               });
           }
         }
