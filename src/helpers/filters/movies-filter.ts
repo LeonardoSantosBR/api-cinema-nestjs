@@ -1,6 +1,6 @@
 import { whereGlobal } from 'src/helpers';
 import { optType } from 'src/types/type-filter';
-import { querySearchMovies } from 'src/modules/cinemas/dto/query-search-movies';
+import { querySearchMovies } from 'src/modules/movies/dto/query-search-movies';
 
 export const moviesFilter = (query: querySearchMovies) => {
   const opt: any = {

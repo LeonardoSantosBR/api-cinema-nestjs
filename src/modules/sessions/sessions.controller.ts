@@ -1,0 +1,104 @@
+import { Injectable } from '@nestjs/common';
+import { SessionsService } from './sessions.service';
+import { CreateSessionDto } from './dto/create-session.dto';
+import { UpdateSessionDto } from './dto/update-session.dto';
+import { Prisma } from '@prisma/client';
+import {
+  pagination_helper,
+  pagination_prisma,
+  sessionsFilter,
+} from 'src/helpers';
+import { querySearchSessions } from './dto/query-search-sessions';
+
+@Injectable()
+export class SessionsController {
+  constructor(private readonly $sessionsService: SessionsService) {}
+
+  async create(body: CreateSessionDto) {
+    return this.$sessionsService.create(body);
+  }
+
+  async findAll(query: querySearchSessions) {
+    const page = +query?.page;
+    const limit = +query?.limit;
+    const orderBy: Prisma.SessionsOrderByWithAggregationInput =
+      query?.order ?? {
+        created_at: 'desc',
+      };
+    const where: Prisma.SessionsWhereInput = {
+      deleted_at: null,
+    };
+    const filter: any = sessionsFilter(query);
+    if (filter?.length) where.OR = filter;
+    const select: Prisma.SessionsSelect = {
+      id: true,
+      starts_at: true,
+      ends_at: true,
+      movie: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      room: {
+        select: {
+          id: true,
+          name: true,
+          cinema: {
+            select: {
+              id: true,
+              name: true,
+              location: true,
+            },
+          },
+        },
+      },
+    };
+
+    const data = await this.$sessionsService.findAll({
+      where,
+      orderBy,
+      select,
+      ...pagination_prisma(limit, page),
+    });
+
+    return pagination_helper(page, limit, data.count, data);
+  }
+
+  async findOne(id: string) {
+    return this.$sessionsService.findOne(+id, {
+      select: {
+        id: true,
+        starts_at: true,
+        ends_at: true,
+        movie: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        room: {
+          select: {
+            id: true,
+            name: true,
+            cinema: {
+              select: {
+                id: true,
+                name: true,
+                location: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
+  async update(id: string, body: UpdateSessionDto) {
+    return this.$sessionsService.update(+id, body);
+  }
+
+  async remove(id: string) {
+    return this.$sessionsService.remove(+id);
+  }
+}

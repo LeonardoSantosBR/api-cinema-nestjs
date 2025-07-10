@@ -2,13 +2,14 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
-import { querySearchMovies } from '../cinemas/dto/query-search-movies';
+
 import { Prisma } from '@prisma/client';
 import {
   moviesFilter,
   pagination_helper,
   pagination_prisma,
 } from 'src/helpers';
+import { querySearchMovies } from './dto/query-search-movies';
 
 @Injectable()
 export class MoviesController {

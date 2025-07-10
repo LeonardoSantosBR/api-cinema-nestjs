@@ -18,7 +18,6 @@ export class CinemasController {
     const cinema = await this.findOneByName(body.name);
     if (cinema)
       throw new BadRequestException('Cinema com esse nome já existe.');
-
     return this.$cinemasService.create(body);
   }
 

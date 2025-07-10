@@ -29,14 +29,14 @@ model Movies {
   created_at     DateTime            @default(now())
   updated_at     DateTime?
   deleted_at     DateTime?
-  sessions       Sessions?
+  sessions       Sessions[]
 
   @@map("movies")
 }
 
 model Sessions {
   id            Int            @id @default(autoincrement())
-  movie_id      Int            @unique
+  movie_id      Int
   room_id       Int
   starts_at     DateTime
   ends_at       DateTime
