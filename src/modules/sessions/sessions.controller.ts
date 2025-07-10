@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { SessionsService } from './sessions.service';
 import { CreateSessionDto } from './dto/create-session.dto';
 import { UpdateSessionDto } from './dto/update-session.dto';
@@ -15,6 +15,19 @@ export class SessionsController {
   constructor(private readonly $sessionsService: SessionsService) {}
 
   async create(body: CreateSessionDto) {
+    const room_already_close = await this.$sessionsService.findOne(undefined, {
+      where: {
+        movie_id: body.movie_id,
+        room_id: body.room_id,
+        starts_at: { lt: new Date(body.ends_at) },
+        ends_at: { gt: new Date(body.starts_at) },
+      },
+    });
+
+    if (room_already_close)
+      throw new BadRequestException(
+        'Horário da sessão ja está ocupada por outra existente.',
+      );
     return this.$sessionsService.create(body);
   }
 

@@ -37,7 +37,7 @@ export class SessionsService {
     return { rows, count };
   }
 
-  async findOne(id: number, arg?: Prisma.SessionsFindFirstArgs) {
+  async findOne(id?: number, arg?: Prisma.SessionsFindFirstArgs) {
     const where = arg?.where || { id, deleted_at: null };
     const query = await this.$sessionsRepository.findOne({
       where,
