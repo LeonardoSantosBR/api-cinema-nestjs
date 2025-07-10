@@ -32,6 +32,16 @@ export class CinemasService {
     return query;
   }
 
+  async findOneByName(name: string, arg?: Prisma.CinemasFindFirstArgs) {
+    const where = arg?.where || { name, deleted_at: null };
+    const query = await this.$cinemasRepository.findOne({
+      where,
+      ...arg,
+    });
+
+    return query;
+  }
+
   async update(id: number, data: UpdateCinemaDto) {
     return await this.$cinemasRepository.update(id, data);
   }

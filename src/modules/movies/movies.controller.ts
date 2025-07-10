@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
@@ -15,6 +15,8 @@ export class MoviesController {
   constructor(private readonly $moviesService: MoviesService) {}
 
   async create(body: CreateMovieDto) {
+    const movie = await this.findOneByName(body.name);
+    if (movie) throw new BadRequestException('Filme com esse nome já existe.');
     return this.$moviesService.create(body);
   }
 
@@ -43,6 +45,10 @@ export class MoviesController {
 
   async findOne(id: string) {
     return this.$moviesService.findOne(+id);
+  }
+
+  async findOneByName(name: string) {
+    return this.$moviesService.findOneByName(name);
   }
 
   async update(id: string, body: UpdateMovieDto) {
