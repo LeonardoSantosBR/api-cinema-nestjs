@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { CreateSessionSeatDto } from './dto/create-session-seat.dto';
-import { UpdateSessionSeatDto } from './dto/update-session-seat.dto';
 import { SessionSeatsRepository } from './session-seats-repository';
 import { Prisma, SessionSeats } from '@prisma/client';
 
@@ -11,20 +10,16 @@ export class SessionSeatsService {
   ) {}
 
   async create(data: CreateSessionSeatDto) {
-    const { seat_id, session_id } = data;
-    const sessionSeatData: Prisma.SessionSeatsCreateInput = {
-      seat: {
-        connect: {
-          id: seat_id,
-        },
-      },
-      session: {
-        connect: {
-          id: session_id,
-        },
-      },
-    };
-    return await this.$sessionSeatsRepository.create(sessionSeatData);
+    const { seats_id, session_id } = data;
+    const seassionSeatDataArray: Prisma.SessionSeatsCreateManyInput[] = [];
+
+    for (const seat_id of seats_id) {
+      seassionSeatDataArray.push({
+        seat_id,
+        session_id,
+      });
+    }
+    return await this.$sessionSeatsRepository.createMany(seassionSeatDataArray);
   }
 
   async findAll(params: Prisma.SessionSeatsFindManyArgs) {
@@ -45,23 +40,6 @@ export class SessionSeatsService {
     });
 
     return query;
-  }
-
-  async update(id: number, data: UpdateSessionSeatDto) {
-    const { seat_id, session_id } = data;
-    const sessionSeatData: Prisma.SessionSeatsUpdateInput = {
-      seat: {
-        connect: {
-          id: seat_id,
-        },
-      },
-      session: {
-        connect: {
-          id: session_id,
-        },
-      },
-    };
-    return await this.$sessionSeatsRepository.update(id, sessionSeatData);
   }
 
   async remove(id: number) {

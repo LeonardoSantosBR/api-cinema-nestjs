@@ -6,8 +6,8 @@ import { Injectable } from '@nestjs/common';
 export class SessionSeatsRepository {
   constructor(private readonly $prismaMysql: PrismaServiceMysql) {}
 
-  async create(data: Prisma.SessionSeatsCreateInput) {
-    await this.$prismaMysql.sessionSeats.create({ data });
+  async createMany(data: Prisma.SessionSeatsCreateManyInput[]) {
+    await this.$prismaMysql.sessionSeats.createMany({ data });
     return true;
   }
 
@@ -23,23 +23,6 @@ export class SessionSeatsRepository {
 
   async count(params: Prisma.SessionSeatsCountArgs): Promise<number> {
     const query = await this.$prismaMysql.sessionSeats.count(params);
-    return query;
-  }
-
-  async update(
-    id: number,
-    data: Prisma.SessionSeatsUpdateInput,
-    arg?: Prisma.SessionSeatsUpdateArgs,
-  ) {
-    const where = arg?.where || { id };
-    const query = await this.$prismaMysql.sessionSeats.update({
-      data: {
-        ...data,
-        updated_at: new Date(),
-      },
-      where,
-      ...arg,
-    });
     return query;
   }
 

@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { IsArray, IsNotEmpty, IsNumber } from 'class-validator';
 
 export class CreateSessionSeatDto {
   @IsNotEmpty()
@@ -6,6 +6,6 @@ export class CreateSessionSeatDto {
   session_id: number;
 
   @IsNotEmpty()
-  @IsNumber()
-  seat_id: number;
+  @IsArray()
+  seats_id: Array<number>;
 }

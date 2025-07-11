@@ -4,12 +4,10 @@ import {
   Delete,
   Get,
   Param,
-  Patch,
   Post,
   Query,
 } from '@nestjs/common';
 import { CreateSessionSeatDto } from './dto/create-session-seat.dto';
-import { UpdateSessionSeatDto } from './dto/update-session-seat.dto';
 import { querySearchSessionSeats } from './dto/query-search-session-seats';
 import { SessionSeatsController } from './session-seats.controller';
 
@@ -32,11 +30,6 @@ export class SessionSeatsRouter {
   @Get()
   async findAll(@Query() query: querySearchSessionSeats) {
     return await this.$sessionSeatsController.findAll(query);
-  }
-
-  @Patch('/:id')
-  async update(@Body() body: UpdateSessionSeatDto, @Param('id') id: string) {
-    return await this.$sessionSeatsController.update(id, body);
   }
 
   @Delete('/:id')
