@@ -1,10 +1,14 @@
 import { Prisma } from '@prisma/client';
 import { PrismaServiceMysql } from 'src/database/prisma_mysql.service';
 import { Injectable } from '@nestjs/common';
+import { PrismaMysqlTransactionService } from 'src/services';
 
 @Injectable()
 export class SessionsRepository {
-  constructor(private readonly $prismaMysql: PrismaServiceMysql) {}
+  constructor(
+    private readonly $prismaMysql: PrismaServiceMysql,
+    private readonly $prismaMysqlTransactionService: PrismaMysqlTransactionService,
+  ) {}
 
   async create(data: Prisma.SessionsCreateInput) {
     await this.$prismaMysql.sessions.create({ data });
@@ -44,9 +48,20 @@ export class SessionsRepository {
   }
 
   async updateSessionsExpired(ids: Array<number>) {
-    await this.$prismaMysql.sessions.updateMany({
-      where: { id: { in: ids } },
-      data: { is_expired: true },
+    const transaction = async (tr: PrismaServiceMysql) => {
+      await tr.sessions.updateMany({
+        where: { id: { in: ids } },
+        data: { is_expired: true },
+      });
+      await tr.sessionSeats.updateMany({
+        where: {
+          id: { in: ids },
+        },
+        data: { deleted_at: new Date() },
+      });
+    };
+    await this.$prismaMysqlTransactionService.transaction(transaction, {
+      timeout: 50000,
     });
   }
 

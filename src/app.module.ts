@@ -4,6 +4,7 @@ import { RoomsModule } from './modules/rooms/rooms.module';
 import { MoviesModule } from './modules/movies/movies.module';
 import { SessionsModule } from './modules/sessions/sessions.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { SessionSeatsModule } from './modules/session-seats/session-seats.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     MoviesModule,
     SessionsModule,
     ScheduleModule.forRoot(),
+    SessionSeatsModule,
   ],
   controllers: [],
   providers: [],

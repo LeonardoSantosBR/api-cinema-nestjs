@@ -96,7 +96,7 @@ model SessionSeats {
   id          Int       @id @default(autoincrement())
   session_id  Int
   seat_id     Int
-  is_reserved Boolean
+  is_reserved Boolean   @default(true)
   created_at  DateTime  @default(now())
   updated_at  DateTime?
   deleted_at  DateTime?

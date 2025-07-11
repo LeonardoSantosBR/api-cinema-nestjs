@@ -83,14 +83,12 @@ export class RoomsService {
       });
 
       const row_ids_from_payload = rows?.map((r) => r.row_id).filter(Boolean);
-
       const existing_rows = await tr.rowsRoom.findMany({
         where: { room_id: id },
         select: { id: true },
       });
 
       const existing_row_ids = existing_rows.map((r) => r.id);
-
       const rows_to_delete = existing_row_ids.filter(
         (rid) => !row_ids_from_payload?.includes(rid),
       );
@@ -112,12 +110,8 @@ export class RoomsService {
           row_label,
         };
 
-        let row_id_to_use = row_id;
-
         if (!row_id) {
           const new_row = await tr.rowsRoom.create({ data: row_data });
-          row_id_to_use = new_row.id;
-
           await tr.seats.createMany({
             data: seats.map((st) => {
               const seatsCreate: Prisma.SeatsCreateManyInput = {
