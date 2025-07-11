@@ -9,7 +9,6 @@ import {
   sessionsFilter,
 } from 'src/helpers';
 import { querySearchSessions } from './dto/query-search-sessions';
-import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class SessionsController {
@@ -26,7 +25,7 @@ export class SessionsController {
 
     if (room_already_close)
       throw new BadRequestException(
-        'Horário da sessão ja está ocupada com outro filme.',
+        'Horário da sessão ja está ocupado com outro filme.',
       );
     return this.$sessionsService.create(body);
   }
