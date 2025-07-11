@@ -40,6 +40,7 @@ model Sessions {
   room_id       Int
   starts_at     DateTime
   ends_at       DateTime
+  is_expired    Boolean        @default(false)
   created_at    DateTime       @default(now())
   updated_at    DateTime?
   deleted_at    DateTime?

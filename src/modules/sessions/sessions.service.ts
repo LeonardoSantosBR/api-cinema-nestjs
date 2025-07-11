@@ -51,6 +51,10 @@ export class SessionsService {
     return await this.$sessionsRepository.update(id, data);
   }
 
+  async updateSessionsExpired(ids: Array<number>) {
+    return await this.$sessionsRepository.updateSessionsExpired(ids);
+  }
+
   async remove(id: number) {
     return await this.$sessionsRepository.remove(id);
   }

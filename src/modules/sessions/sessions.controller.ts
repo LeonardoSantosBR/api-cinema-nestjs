@@ -9,6 +9,7 @@ import {
   sessionsFilter,
 } from 'src/helpers';
 import { querySearchSessions } from './dto/query-search-sessions';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class SessionsController {
@@ -17,7 +18,6 @@ export class SessionsController {
   async create(body: CreateSessionDto) {
     const room_already_close = await this.$sessionsService.findOne(undefined, {
       where: {
-        movie_id: body.movie_id,
         room_id: body.room_id,
         starts_at: { lt: new Date(body.ends_at) },
         ends_at: { gt: new Date(body.starts_at) },
@@ -26,7 +26,7 @@ export class SessionsController {
 
     if (room_already_close)
       throw new BadRequestException(
-        'Horário da sessão ja está ocupada por outra existente.',
+        'Horário da sessão ja está ocupada com outro filme.',
       );
     return this.$sessionsService.create(body);
   }
@@ -39,6 +39,7 @@ export class SessionsController {
         created_at: 'desc',
       };
     const where: Prisma.SessionsWhereInput = {
+      is_expired: false,
       deleted_at: null,
     };
     const filter: any = sessionsFilter(query);
@@ -113,5 +114,24 @@ export class SessionsController {
 
   async remove(id: string) {
     return this.$sessionsService.remove(+id);
+  }
+
+  @Cron(CronExpression.EVERY_10_SECONDS)
+  async handleCronSessionExpired() {
+    const today = new Date();
+    const sessions_expired = await this.$sessionsService.findAll({
+      where: {
+        ends_at: {
+          lte: today,
+        },
+      },
+      select: { id: true },
+    });
+
+    const ids = sessions_expired.rows?.map((se) => {
+      return se.id;
+    });
+
+    await this.$sessionsService.updateSessionsExpired(ids);
   }
 }

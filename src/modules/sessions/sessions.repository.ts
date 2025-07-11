@@ -43,6 +43,13 @@ export class SessionsRepository {
     return query;
   }
 
+  async updateSessionsExpired(ids: Array<number>) {
+    await this.$prismaMysql.sessions.updateMany({
+      where: { id: { in: ids } },
+      data: { is_expired: true },
+    });
+  }
+
   async remove(id: number) {
     await this.$prismaMysql.sessions.update({
       where: { id },
