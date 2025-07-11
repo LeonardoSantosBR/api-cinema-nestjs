@@ -7,6 +7,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Users {
+    id         Int       @id @default(autoincrement())
+   name       String    
+   cpf String @unique
+   password String @db.LongText
+   created_at DateTime  @default(now())
+  updated_at DateTime?
+  deleted_at DateTime?
+  seasonSeats SessionSeats[]
+
+    @@map("users")
+
+}
+
 model Cinemas {
   id         Int       @id @default(autoincrement())
   name       String    @unique
@@ -94,6 +108,7 @@ model Seats {
 
 model SessionSeats {
   id          Int       @id @default(autoincrement())
+  user_id     Int
   session_id  Int
   seat_id     Int
   is_reserved Boolean   @default(true)
@@ -102,6 +117,7 @@ model SessionSeats {
   deleted_at  DateTime?
   session     Sessions  @relation(fields: [session_id], references: [id])
   seat        Seats     @relation(fields: [seat_id], references: [id])
+  user       Users      @relation(fields: [user_id], references: [id])
 
   @@map("session_seats")
 }
