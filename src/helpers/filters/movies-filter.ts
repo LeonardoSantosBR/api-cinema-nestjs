@@ -2,7 +2,7 @@ import { whereGlobal } from 'src/helpers';
 import { optType } from 'src/types/type-filter';
 import { querySearchMovies } from 'src/modules/movies/dto/query-search-movies';
 
-export const moviesFilter = (query: querySearchMovies) => {
+export const movies_filter = (query: querySearchMovies) => {
   const opt: any = {
     name: {
       value: query?.search,

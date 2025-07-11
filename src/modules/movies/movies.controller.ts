@@ -5,7 +5,7 @@ import { UpdateMovieDto } from './dto/update-movie.dto';
 
 import { Prisma } from '@prisma/client';
 import {
-  moviesFilter,
+  movies_filter,
   pagination_helper,
   pagination_prisma,
 } from 'src/helpers';
@@ -30,7 +30,7 @@ export class MoviesController {
     const where: Prisma.MoviesWhereInput = {
       deleted_at: null,
     };
-    const filter: any = moviesFilter(query);
+    const filter: any = movies_filter(query);
     if (filter?.length) where.OR = filter;
     const include: Prisma.MoviesInclude = {
       sessions: {

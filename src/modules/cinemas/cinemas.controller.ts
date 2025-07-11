@@ -5,7 +5,7 @@ import { UpdateCinemaDto } from './dto/update-cinema.dto';
 import { querySearchCinemas } from './dto/query-search-cinema';
 import { Prisma } from '@prisma/client';
 import {
-  cinemasFilter,
+  cinemas_filter,
   pagination_helper,
   pagination_prisma,
 } from 'src/helpers';
@@ -30,7 +30,7 @@ export class CinemasController {
     const where: Prisma.CinemasWhereInput = {
       deleted_at: null,
     };
-    const filter: any = cinemasFilter(query);
+    const filter: any = cinemas_filter(query);
     if (filter?.length) where.OR = filter;
     const include: Prisma.CinemasInclude = {
       rooms: {

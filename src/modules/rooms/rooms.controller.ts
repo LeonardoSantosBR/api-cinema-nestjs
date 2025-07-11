@@ -4,7 +4,7 @@ import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
 import { Prisma } from '@prisma/client';
 import { pagination_helper, pagination_prisma } from 'src/helpers';
-import { roomsFilter } from 'src/helpers/filters/rooms-filter';
+import { rooms_filter } from 'src/helpers/filters/rooms-filter';
 import { querySearchRooms } from './dto/query-search-rooms';
 
 @Injectable()
@@ -24,7 +24,7 @@ export class RoomsController {
     const where: Prisma.RoomsWhereInput = {
       deleted_at: null,
     };
-    const filter: any = roomsFilter(query);
+    const filter: any = rooms_filter(query);
     if (filter?.length) where.OR = filter;
     const include: Prisma.RoomsInclude = {
       cinema: {

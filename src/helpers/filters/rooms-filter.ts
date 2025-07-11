@@ -2,7 +2,7 @@ import { whereGlobal } from 'src/helpers';
 import { optType } from 'src/types/type-filter';
 import { querySearchRooms } from 'src/modules/rooms/dto/query-search-rooms';
 
-export const roomsFilter = (query: querySearchRooms) => {
+export const rooms_filter = (query: querySearchRooms) => {
   const opt: any = {
     name: {
       value: query?.search,

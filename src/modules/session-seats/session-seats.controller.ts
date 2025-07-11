@@ -6,7 +6,7 @@ import { Prisma } from '@prisma/client';
 import {
   pagination_helper,
   pagination_prisma,
-  sessionSeatsFilter,
+  session_seats_filter,
 } from 'src/helpers';
 import { querySearchSessionSeats } from './dto/query-search-session-seats';
 
@@ -41,7 +41,7 @@ export class SessionSeatsController {
     const where: Prisma.SessionSeatsWhereInput = {
       deleted_at: null,
     };
-    const filter: any = sessionSeatsFilter(query);
+    const filter: any = session_seats_filter(query);
     if (filter?.length) where.OR = filter;
     const select: Prisma.SessionSeatsSelect = {};
 
