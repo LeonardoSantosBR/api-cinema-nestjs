@@ -32,7 +32,26 @@ export class MoviesController {
     };
     const filter: any = moviesFilter(query);
     if (filter?.length) where.OR = filter;
-    const include: Prisma.MoviesInclude = {};
+    const include: Prisma.MoviesInclude = {
+      sessions: {
+        select: {
+          starts_at: true,
+          ends_at: true,
+          movie: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          room: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      },
+    };
 
     const data = await this.$moviesService.findAll({
       where,

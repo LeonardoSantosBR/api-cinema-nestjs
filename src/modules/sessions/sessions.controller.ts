@@ -115,23 +115,4 @@ export class SessionsController {
   async remove(id: string) {
     return this.$sessionsService.remove(+id);
   }
-
-  @Cron(CronExpression.EVERY_10_SECONDS)
-  async handleCronSessionExpired() {
-    const today = new Date();
-    const sessions_expired = await this.$sessionsService.findAll({
-      where: {
-        ends_at: {
-          lte: today,
-        },
-      },
-      select: { id: true },
-    });
-
-    const ids = sessions_expired.rows?.map((se) => {
-      return se.id;
-    });
-
-    await this.$sessionsService.updateSessionsExpired(ids);
-  }
 }

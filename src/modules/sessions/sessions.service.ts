@@ -3,6 +3,7 @@ import { CreateSessionDto } from './dto/create-session.dto';
 import { UpdateSessionDto } from './dto/update-session.dto';
 import { Sessions, Prisma } from '@prisma/client';
 import { SessionsRepository } from './sessions.repository';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class SessionsService {
@@ -51,11 +52,26 @@ export class SessionsService {
     return await this.$sessionsRepository.update(id, data);
   }
 
-  async updateSessionsExpired(ids: Array<number>) {
-    return await this.$sessionsRepository.updateSessionsExpired(ids);
-  }
-
   async remove(id: number) {
     return await this.$sessionsRepository.remove(id);
+  }
+
+  @Cron(CronExpression.EVERY_10_SECONDS)
+  async handleCronSessionExpired() {
+    const today = new Date();
+    const sessions_expired = await this.$sessionsRepository.findAll({
+      where: {
+        ends_at: {
+          lte: today,
+        },
+      },
+      select: { id: true },
+    });
+
+    const ids = sessions_expired?.map((se) => {
+      return se.id;
+    });
+
+    await this.$sessionsRepository.updateSessionsExpired(ids);
   }
 }
