@@ -8,17 +8,16 @@ datasource db {
 }
 
 model Users {
-    id         Int       @id @default(autoincrement())
-   name       String    
-   cpf String @unique
-   password String @db.LongText
-   created_at DateTime  @default(now())
-  updated_at DateTime?
-  deleted_at DateTime?
+  id          Int            @id @default(autoincrement())
+  name        String
+  cpf         String         @unique
+  password    String         @db.LongText
+  created_at  DateTime       @default(now())
+  updated_at  DateTime?
+  deleted_at  DateTime?
   seasonSeats SessionSeats[]
 
-    @@map("users")
-
+  @@map("users")
 }
 
 model Cinemas {
@@ -117,7 +116,7 @@ model SessionSeats {
   deleted_at  DateTime?
   session     Sessions  @relation(fields: [session_id], references: [id])
   seat        Seats     @relation(fields: [seat_id], references: [id])
-  user       Users      @relation(fields: [user_id], references: [id])
+  user        Users     @relation(fields: [user_id], references: [id])
 
   @@map("session_seats")
 }

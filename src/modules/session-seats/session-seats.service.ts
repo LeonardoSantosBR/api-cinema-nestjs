@@ -17,6 +17,7 @@ export class SessionSeatsService {
       seassionSeatDataArray.push({
         seat_id,
         session_id,
+        user_id: 2,
       });
     }
     return await this.$sessionSeatsRepository.createMany(seassionSeatDataArray);

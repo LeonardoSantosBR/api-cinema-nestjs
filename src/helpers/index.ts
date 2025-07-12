@@ -8,3 +8,4 @@ export * from './pagination/pagination-prisma';
 export * from './nested-object';
 export * from './filters/sessions-filter';
 export * from './filters/session-seats-filter';
+export * from './filters/users-filter';
