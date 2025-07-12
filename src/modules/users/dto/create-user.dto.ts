@@ -1,4 +1,6 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { sanitizeCpf } from 'src/helpers/sanitize.cpf.helper';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -7,9 +9,10 @@ export class CreateUserDto {
 
   @IsNotEmpty()
   @IsString()
+  @Transform(({ value }) => sanitizeCpf(value))
   cpf: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  password: string;
+  password?: string;
 }

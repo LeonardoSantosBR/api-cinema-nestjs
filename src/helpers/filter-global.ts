@@ -1,5 +1,5 @@
 import { optType } from 'src/types/type-filter';
-import { transformObject } from './nested-object';
+import { transformObject } from './nested-object.helper';
 
 export function whereGlobal(opt) {
   const dataString: any = Object.values(opt).reduce((ret: any, filter: any) => {

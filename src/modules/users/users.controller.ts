@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -9,24 +9,16 @@ import {
   users_filter,
 } from 'src/helpers';
 import { querySearchUser } from './dto/query-search-user';
-import { HashService } from 'src/services';
 
 @Injectable()
 export class UsersController {
-  constructor(
-    private readonly $usersService: UsersService,
-    private readonly $hashService: HashService,
-  ) {}
+  constructor(private readonly $usersService: UsersService) {}
 
   async create(body: CreateUserDto) {
-    const { password, ...rest } = body;
-    const hashed_password = await this.$hashService.encrypt(password);
-
-    const user_dt: Prisma.UsersCreateInput = {
-      ...rest,
-      password: hashed_password,
-    };
-    return this.$usersService.create(user_dt);
+    const cpf_already_exists = await this.findOneByCpf(body.cpf);
+    if (cpf_already_exists)
+      throw new BadRequestException('Usuário com esse CPF já existe.');
+    return this.$usersService.create(body);
   }
 
   async findAll(query: querySearchUser) {
@@ -54,6 +46,10 @@ export class UsersController {
 
   async findOne(id: string) {
     return this.$usersService.findOne(+id);
+  }
+
+  async findOneByCpf(cpf: string) {
+    return this.$usersService.findOne(undefined, { where: { cpf } });
   }
 
   async update(id: string, body: UpdateUserDto) {

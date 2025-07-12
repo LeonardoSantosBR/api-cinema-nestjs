@@ -3,13 +3,24 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersRepository } from './users.repository';
 import { Prisma, Users } from '@prisma/client';
+import { HashService } from 'src/services';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly $usersRepository: UsersRepository) {}
+  constructor(
+    private readonly $usersRepository: UsersRepository,
+    private readonly $hashService: HashService,
+  ) {}
 
   async create(data: CreateUserDto) {
-    return await this.$usersRepository.create(data);
+    const { password, ...rest } = data;
+    const hashed_password = await this.$hashService.encrypt(password);
+
+    const user_dt: Prisma.UsersCreateInput = {
+      ...rest,
+      password: hashed_password,
+    };
+    return await this.$usersRepository.create(user_dt);
   }
 
   async findAll(params: Prisma.UsersFindManyArgs) {
@@ -22,7 +33,7 @@ export class UsersService {
     return { rows, count };
   }
 
-  async findOne(id: number, arg?: Prisma.UsersFindFirstArgs) {
+  async findOne(id?: number, arg?: Prisma.UsersFindFirstArgs) {
     const where = arg?.where || { id, deleted_at: null };
     const query = await this.$usersRepository.findOne({
       where,

@@ -6,6 +6,7 @@ import { SessionsModule } from './modules/sessions/sessions.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { SessionSeatsModule } from './modules/session-seats/session-seats.module';
 import { UsersModule } from './modules/users/users.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { UsersModule } from './modules/users/users.module';
     ScheduleModule.forRoot(),
     SessionSeatsModule,
     UsersModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
