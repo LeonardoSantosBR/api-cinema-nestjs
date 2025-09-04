@@ -12,6 +12,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { querySearchUser } from './dto/query-search-user';
 import { UsersController } from './users.controller';
+import { getUser } from 'src/decorators';
+import { UserToken } from 'src/types';
 
 @Controller('users')
 export class UsersRouter {
@@ -20,6 +22,12 @@ export class UsersRouter {
   @Post()
   async create(@Body() body: CreateUserDto) {
     return await this.$usersController.create(body);
+  }
+
+  @Get('/find-my-tickets')
+  async findMyTickets(@getUser() user: UserToken) {
+    const { id } = user;
+    return await this.$usersController.findMyTickets(id);
   }
 
   @Get('/:id')

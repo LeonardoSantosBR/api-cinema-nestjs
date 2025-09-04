@@ -44,6 +44,10 @@ export class UsersController {
     return pagination_helper(page, limit, data.count, data);
   }
 
+  async findMyTickets(id: number) {
+    return this.$usersService.findMyTickets(id);
+  }
+
   async findOne(id: string) {
     return this.$usersService.findOne(+id);
   }

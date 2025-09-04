@@ -33,6 +33,10 @@ export class UsersService {
     return { rows, count };
   }
 
+  async findMyTickets(id: number) {
+    return await this.$usersRepository.findMyTickets(id);
+  }
+
   async findOne(id?: number, arg?: Prisma.UsersFindFirstArgs) {
     const where = arg?.where || { id, deleted_at: null };
     const query = await this.$usersRepository.findOne({
