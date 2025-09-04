@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, UseGuards } from '@nestjs/common';
 import { CinemasModule } from './modules/cinemas/cinemas.module';
 import { RoomsModule } from './modules/rooms/rooms.module';
 import { MoviesModule } from './modules/movies/movies.module';
@@ -7,6 +7,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { SessionSeatsModule } from './modules/session-seats/session-seats.module';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { AuthGuard } from './modules/auth/auth.guard';
 
 @Module({
   imports: [
@@ -20,6 +21,11 @@ import { AuthModule } from './modules/auth/auth.module';
     AuthModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: 'APP_GUARD',
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class AppModule {}

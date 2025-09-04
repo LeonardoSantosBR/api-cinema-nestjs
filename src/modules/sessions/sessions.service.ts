@@ -64,14 +64,13 @@ export class SessionsService {
         ends_at: {
           lte: today,
         },
+        is_expired: false,
       },
       select: { id: true },
     });
-
     const ids = sessions_expired?.map((se) => {
       return se.id;
     });
-
     await this.$sessionsRepository.updateSessionsExpired(ids);
   }
 }

@@ -22,7 +22,6 @@ export class SessionsController {
         ends_at: { gt: new Date(body.starts_at) },
       },
     });
-
     if (room_already_close)
       throw new BadRequestException(
         'Horário da sessão ja está ocupado com outro filme.',
@@ -67,14 +66,12 @@ export class SessionsController {
         },
       },
     };
-
     const data = await this.$sessionsService.findAll({
       where,
       orderBy,
       select,
       ...pagination_prisma(limit, page),
     });
-
     return pagination_helper(page, limit, data.count, data);
   }
 

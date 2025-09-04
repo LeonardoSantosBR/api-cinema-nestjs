@@ -14,7 +14,6 @@ export class AuthController {
 
   async signin(@Body() body: SigninAuthDto) {
     const { cpf, password } = body;
-
     const user = await this.$usersService.findOne(undefined, {
       where: { cpf },
       select: {
@@ -26,11 +25,8 @@ export class AuthController {
     });
 
     if (!user) throw new BadRequestException('Usuário não encontrado.');
-
     const pass_valid = await this.$hashService.compare(password, user.password);
-
     if (!pass_valid) throw new BadRequestException('Senha inválida.');
-
     return await this.$authService.getCredentials({
       id: user.id,
       name: user.name,

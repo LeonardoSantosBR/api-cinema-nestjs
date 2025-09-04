@@ -8,12 +8,13 @@ import {
   session_seats_filter,
 } from 'src/helpers';
 import { querySearchSessionSeats } from './dto/query-search-session-seats';
+import { UserToken } from 'src/types';
 
 @Injectable()
 export class SessionSeatsController {
   constructor(private readonly $sessionSeatsService: SessionSeatsService) {}
 
-  async create(body: CreateSessionSeatDto) {
+  async create(body: CreateSessionSeatDto, user: UserToken) {
     const seat_already_close = await this.$sessionSeatsService.findAll({
       where: {
         session_id: body.session_id,
@@ -28,7 +29,7 @@ export class SessionSeatsController {
       throw new BadRequestException(
         'Assentos para essa sessão já está ocupado.',
       );
-    return this.$sessionSeatsService.create(body);
+    return this.$sessionSeatsService.create(body, user);
   }
 
   async findAll(query: querySearchSessionSeats) {
