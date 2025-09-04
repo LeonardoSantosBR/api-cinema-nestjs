@@ -22,13 +22,13 @@ export class UsersRepository {
                       ss_seats.id,
                       ss_seats.session_id,
                       mv.name,
-                      rms.name AS room_name
+                      rms.name AS room_name,
                   FROM session_seats ss_seats
                   JOIN sessions sess ON ss_seats.session_id = sess.id
                   JOIN movies mv ON sess.movie_id = mv.id
                   JOIN rooms rms ON sess.room_id = rms.id
                   JOIN seats sts ON ss_seats.seat_id = sts.id
-                  WHERE ss_seats.user_id = ${id} AND ss_seats.deleted_at IS NULL
+                  WHERE ss_seats.user_id = ${id} AND ss_seats.deleted_at IS NULL 
                   `;
     return query;
   }

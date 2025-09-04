@@ -14,11 +14,13 @@ import { querySearchUser } from './dto/query-search-user';
 import { UsersController } from './users.controller';
 import { getUser } from 'src/decorators';
 import { UserToken } from 'src/types';
+import { SkipAuth } from '../auth/auth.decorator';
 
 @Controller('users')
 export class UsersRouter {
   constructor(private readonly $usersController: UsersController) {}
 
+  @SkipAuth()
   @Post()
   async create(@Body() body: CreateUserDto) {
     return await this.$usersController.create(body);
