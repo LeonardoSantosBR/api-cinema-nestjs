@@ -19,20 +19,19 @@ export class UsersRepository {
   async findMyTickets(id: number) {
     return await this.$prismaMysql.$queryRaw`
         SELECT 
-              ss.id,
-              ss.session_id,
-              st.seat_number,
-              m.name,
-              r.name AS room_name,
-              rr.row_label
+            ss.id,
+            ss.session_id,
+            st.seat_number,
+            m.name,
+            r.name AS room_name,
+            rr.row_label
         FROM session_seats ss
             JOIN sessions sn ON ss.session_id = sn.id
             JOIN movies m ON sn.movie_id = m.id
             JOIN rooms r ON sn.room_id = r.id
             JOIN seats st ON ss.seat_id = st.id
             JOIN rows_room rr ON st.row_id = rr.id
-            WHERE ss.user_id = ${id} AND ss.deleted_at IS NULL
-                  `;
+            WHERE ss.user_id = ${id} AND ss.deleted_at IS NULL AND sn.is_expired = false`;
   }
 
   async findOne(params: Prisma.UsersFindFirstArgs) {
