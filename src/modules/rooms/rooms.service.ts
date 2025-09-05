@@ -72,7 +72,6 @@ export class RoomsService {
 
   async update(id: number, data: UpdateRoomDto) {
     const { rows, ...rest } = data;
-
     const transaction = async (tr: PrismaServiceMysql) => {
       const updated_room = await tr.rooms.update({
         where: { id },
@@ -81,18 +80,15 @@ export class RoomsService {
           updated_at: new Date(),
         },
       });
-
       const row_ids_from_payload = rows?.map((r) => r.row_id).filter(Boolean);
       const existing_rows = await tr.rowsRoom.findMany({
         where: { room_id: id },
         select: { id: true },
       });
-
       const existing_row_ids = existing_rows.map((r) => r.id);
       const rows_to_delete = existing_row_ids.filter(
         (rid) => !row_ids_from_payload?.includes(rid),
       );
-
       if (rows_to_delete.length > 0) {
         await tr.seats.deleteMany({
           where: { row_id: { in: rows_to_delete } },
@@ -101,15 +97,12 @@ export class RoomsService {
           where: { id: { in: rows_to_delete } },
         });
       }
-
       for (const r of rows!) {
         const { row_id, seats, row_label } = r;
-
         const row_data = {
           room_id: updated_room.id,
           row_label,
         };
-
         if (!row_id) {
           const new_row = await tr.rowsRoom.create({ data: row_data });
           await tr.seats.createMany({
@@ -127,27 +120,31 @@ export class RoomsService {
             where: { id: row_id },
             data: row_data,
           });
-
           for (const st of seats) {
-            const seatUpdate: Prisma.SeatsUpdateInput = {
-              seat_number: st.seat_number,
-              is_accessible: st.is_accessible,
-            };
-            if (st.seat_id)
-              await tr.seats.update({
-                where: {
-                  id: st.seat_id,
-                },
-                data: seatUpdate,
-              });
+            await tr.seats.upsert({
+              where: {
+                id: st.seat_id || -1,
+              },
+              update: {
+                seat_number: st.seat_number,
+                is_accessible: st.is_accessible,
+                updated_at: new Date(),
+              },
+              create: {
+                row_id: row_id,
+                seat_number: st.seat_number,
+                is_accessible: st.is_accessible,
+                created_at: new Date(),
+              },
+            });
           }
         }
       }
     };
-
     await this.$prismaMysqlTransactionService.transaction(transaction, {
-      timeout: 50000,
+      timeout: 1000000,
     });
+    return true;
   }
   async remove(id: number) {
     return await this.$roomsRepository.remove(id);

@@ -1,7 +1,6 @@
 import {
   IsArray,
   IsBoolean,
-  IsEmpty,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -9,7 +8,8 @@ import {
 } from 'class-validator';
 
 export class CreateSeatsDto {
-  @IsEmpty()
+  @IsOptional()
+  @IsNumber()
   seat_id: number;
 
   @IsNotEmpty()
