@@ -4,6 +4,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersRepository } from './users.repository';
 import { Prisma, Users } from '@prisma/client';
 import { HashService } from 'src/services';
+import { Itickets } from 'src/types';
 
 @Injectable()
 export class UsersService {
@@ -33,8 +34,9 @@ export class UsersService {
     return { rows, count };
   }
 
-  async findMyTickets(id: number) {
-    return await this.$usersRepository.findMyTickets(id);
+  async findMySessions(id: number) {
+    const rows: Itickets[] = await this.$usersRepository.findMySessions(id);
+    return this.format_sessions_rows(rows);
   }
 
   async findOne(id?: number, arg?: Prisma.UsersFindFirstArgs) {
@@ -53,5 +55,33 @@ export class UsersService {
 
   async remove(id: number) {
     return await this.$usersRepository.remove(id);
+  }
+
+  async format_sessions_rows(rows: Itickets[]) {
+    const sessions: any = [];
+    for (const r of rows) {
+      const session_exists = sessions.find((s) => s.session_id == r.session_id);
+      if (!session_exists) {
+        sessions.push({
+          id: r.id,
+          name: r.name,
+          cinema_name: r.cinema_name,
+          room_name: r.room_name,
+          session_id: r.session_id,
+          seats: [],
+        });
+      }
+    }
+    for (const r of rows) {
+      for (const s of sessions) {
+        if (s.session_id === r.session_id) {
+          s.seats.push(`${r.row_label}-${r.seat_number}`);
+        }
+      }
+    }
+
+    return {
+      sessions,
+    };
   }
 }

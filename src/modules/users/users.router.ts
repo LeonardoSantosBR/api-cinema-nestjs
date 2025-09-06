@@ -26,10 +26,10 @@ export class UsersRouter {
     return await this.$usersController.create(body);
   }
 
-  @Get('/find-my-tickets')
-  async findMyTickets(@getUser() user: UserToken) {
+  @Get('/find-my-sessions')
+  async findMySessions(@getUser() user: UserToken) {
     const { id } = user;
-    return await this.$usersController.findMyTickets(id);
+    return await this.$usersController.findMySessions(id);
   }
 
   @Get('/:id')

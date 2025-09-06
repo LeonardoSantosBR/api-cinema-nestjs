@@ -1,6 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { PrismaServiceMysql } from 'src/database/prisma_mysql.service';
 import { Injectable } from '@nestjs/common';
+import { Itickets } from 'src/types';
 
 @Injectable()
 export class UsersRepository {
@@ -16,22 +17,28 @@ export class UsersRepository {
     return query;
   }
 
-  async findMyTickets(id: number) {
-    return await this.$prismaMysql.$queryRaw`
+  async findMySessions(id: number) {
+    const query: Itickets[] = 
+       await this.$prismaMysql.$queryRaw`
         SELECT 
             ss.id,
             ss.session_id,
             st.seat_number,
             m.name,
             r.name AS room_name,
-            rr.row_label
+            rr.row_label,
+            c.name AS cinema_name
         FROM session_seats ss
             JOIN sessions sn ON ss.session_id = sn.id
             JOIN movies m ON sn.movie_id = m.id
             JOIN rooms r ON sn.room_id = r.id
+            JOIN cinemas c ON r.cinema_id = c.id
             JOIN seats st ON ss.seat_id = st.id
             JOIN rows_room rr ON st.row_id = rr.id
-            WHERE ss.user_id = ${id} AND ss.deleted_at IS NULL AND sn.is_expired = false`;
+            WHERE ss.user_id = ${id} AND ss.deleted_at IS NULL AND sn.is_expired = false
+        `;
+
+    return query;
   }
 
   async findOne(params: Prisma.UsersFindFirstArgs) {
