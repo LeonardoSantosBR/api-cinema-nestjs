@@ -13,7 +13,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { querySearchUser } from './dto/query-search-user';
 import { UsersController } from './users.controller';
 import { getUser } from 'src/decorators';
-import { UserToken } from 'src/types';
+import { IuserToken } from 'src/types';
 import { SkipAuth } from '../auth/auth.decorator';
 
 @Controller('users')
@@ -27,7 +27,7 @@ export class UsersRouter {
   }
 
   @Get('/find-my-sessions')
-  async findMySessions(@getUser() user: UserToken) {
+  async findMySessions(@getUser() user: IuserToken) {
     const { id } = user;
     return await this.$usersController.findMySessions(id);
   }

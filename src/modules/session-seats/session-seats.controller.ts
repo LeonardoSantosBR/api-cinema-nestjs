@@ -8,13 +8,13 @@ import {
   session_seats_filter,
 } from 'src/helpers';
 import { querySearchSessionSeats } from './dto/query-search-session-seats';
-import { UserToken } from 'src/types';
+import { IuserToken } from 'src/types';
 
 @Injectable()
 export class SessionSeatsController {
   constructor(private readonly $sessionSeatsService: SessionSeatsService) {}
 
-  async create(body: CreateSessionSeatDto, user: UserToken) {
+  async create(body: CreateSessionSeatDto, user: IuserToken) {
     const seat_already_close = await this.$sessionSeatsService.findAll({
       where: {
         session_id: body.session_id,

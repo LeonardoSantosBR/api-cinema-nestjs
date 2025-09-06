@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateSessionSeatDto } from './dto/create-session-seat.dto';
 import { SessionSeatsRepository } from './session-seats-repository';
 import { Prisma, SessionSeats } from '@prisma/client';
-import { UserToken } from 'src/types';
+import { IuserToken } from 'src/types';
 
 @Injectable()
 export class SessionSeatsService {
@@ -10,7 +10,7 @@ export class SessionSeatsService {
     private readonly $sessionSeatsRepository: SessionSeatsRepository,
   ) {}
 
-  async create(data: CreateSessionSeatDto, user: UserToken) {
+  async create(data: CreateSessionSeatDto, user: IuserToken) {
     const { seats_id, session_id } = data;
     const seassion_seat_data_array: Prisma.SessionSeatsCreateManyInput[] = [];
     for (const seat_id of seats_id) {

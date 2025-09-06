@@ -11,7 +11,7 @@ import { CreateSessionSeatDto } from './dto/create-session-seat.dto';
 import { querySearchSessionSeats } from './dto/query-search-session-seats';
 import { SessionSeatsController } from './session-seats.controller';
 import { getUser } from 'src/decorators';
-import { UserToken } from 'src/types';
+import { IuserToken } from 'src/types';
 
 @Controller('session-seats')
 export class SessionSeatsRouter {
@@ -20,7 +20,10 @@ export class SessionSeatsRouter {
   ) {}
 
   @Post()
-  async create(@Body() body: CreateSessionSeatDto, @getUser() user: UserToken) {
+  async create(
+    @Body() body: CreateSessionSeatDto,
+    @getUser() user: IuserToken,
+  ) {
     return await this.$sessionSeatsController.create(body, user);
   }
 
