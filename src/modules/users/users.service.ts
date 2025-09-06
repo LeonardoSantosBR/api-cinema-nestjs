@@ -58,6 +58,7 @@ export class UsersService {
   }
 
   async format_sessions_rows(rows: Itickets[]) {
+    if (rows.length == 0) return [];
     const sessions: any = [];
     for (const r of rows) {
       const session_exists = sessions.find((s) => s.session_id == r.session_id);
@@ -80,8 +81,6 @@ export class UsersService {
       }
     }
 
-    return {
-      sessions,
-    };
+    return { sessions };
   }
 }
