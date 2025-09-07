@@ -1,43 +1,41 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Param, Query } from '@nestjs/common';
 import { CreateCinemaDto } from './dto/create-cinema.dto';
 import { UpdateCinemaDto } from './dto/update-cinema.dto';
 import { querySearchCinemas } from './dto/query-search-cinema';
 import { CinemasController } from './cinemas.controller';
+import {
+  cinemas_delete,
+  cinemas_get,
+  cinemas_get_by_id,
+  cinemas_path,
+  cinemas_post,
+} from './decorators';
 
 @Controller('cinemas')
 export class CinemasRouter {
   constructor(private readonly $cinemasController: CinemasController) {}
 
-  @Post()
+  @cinemas_post()
   async create(@Body() body: CreateCinemaDto) {
     return await this.$cinemasController.create(body);
   }
 
-  @Get('/:id')
+  @cinemas_get_by_id()
   async findOne(@Param('id') id: string) {
     return await this.$cinemasController.findOne(id);
   }
 
-  @Get()
+  @cinemas_get()
   async findAll(@Query() query: querySearchCinemas) {
     return await this.$cinemasController.findAll(query);
   }
 
-  @Patch('/:id')
+  @cinemas_path()
   async update(@Body() body: UpdateCinemaDto, @Param('id') id: string) {
     return await this.$cinemasController.update(id, body);
   }
 
-  @Delete('/:id')
+  @cinemas_delete()
   async remove(@Param('id') id: string) {
     return await this.$cinemasController.remove(id);
   }
