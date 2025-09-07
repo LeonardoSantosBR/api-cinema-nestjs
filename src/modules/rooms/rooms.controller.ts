@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { RoomsService } from './rooms.service';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
@@ -12,6 +12,13 @@ export class RoomsController {
   constructor(private readonly $roomsService: RoomsService) {}
 
   async create(body: CreateRoomDto) {
+    const room_already_exists = await this.$roomsService.findOne(undefined, {
+      where: { cinema_id: body.cinema_id, name: body.name },
+    });
+    if (room_already_exists)
+      throw new BadRequestException(
+        'Este cinema ja possui uma sala com este nome.',
+      );
     return this.$roomsService.create(body);
   }
 

@@ -123,5 +123,7 @@ model SessionSeats {
 
 enum MovieClassification {
   FREE
+  PLUS12
+  PLUS16
   PLUS18
 }

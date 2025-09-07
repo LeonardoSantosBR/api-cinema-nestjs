@@ -59,7 +59,7 @@ export class RoomsService {
     return { rows, count };
   }
 
-  async findOne(id: number, arg?: Prisma.RoomsFindFirstArgs) {
+  async findOne(id?: number, arg?: Prisma.RoomsFindFirstArgs) {
     const where = arg?.where || { id, deleted_at: null };
     const query = await this.$roomsRepository.findOne({
       where,
