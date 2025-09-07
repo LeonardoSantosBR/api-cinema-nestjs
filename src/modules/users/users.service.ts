@@ -16,7 +16,6 @@ export class UsersService {
   async create(data: CreateUserDto) {
     const { password, ...rest } = data;
     const hashed_password = await this.$hashService.encrypt(password);
-
     const user_dt: Prisma.UsersCreateInput = {
       ...rest,
       password: hashed_password,
@@ -80,7 +79,6 @@ export class UsersService {
         }
       }
     }
-
     return { sessions };
   }
 }

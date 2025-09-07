@@ -15,14 +15,13 @@ export class RoomsService {
 
   async create(data: CreateRoomDto) {
     const { cinema_id, rows, name } = data;
-
     const transaction = async (tr: PrismaServiceMysql) => {
       const new_room = await tr.rooms.create({
         data: { name, cinema: { connect: { id: cinema_id } } },
       });
       for (const r of rows) {
         const { seats, row_label } = r;
-        const rowsCreate: Prisma.RowsRoomCreateInput = {
+        const rows_create: Prisma.RowsRoomCreateInput = {
           room: {
             connect: {
               id: new_room.id,
@@ -31,16 +30,16 @@ export class RoomsService {
           row_label,
         };
         const new_row = await tr.rowsRoom.create({
-          data: rowsCreate,
+          data: rows_create,
         });
         await tr.seats.createMany({
           data: seats.map((st) => {
-            const seatsCreate: Prisma.SeatsCreateManyInput = {
+            const seats_create: Prisma.SeatsCreateManyInput = {
               row_id: new_row.id,
               seat_number: st.seat_number,
               is_accessible: st.is_accessible,
             };
-            return seatsCreate;
+            return seats_create;
           }),
         });
       }

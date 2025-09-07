@@ -11,7 +11,7 @@ export class SessionsService {
 
   async create(data: CreateSessionDto) {
     const { starts_at, ends_at, room_id, movie_id } = data;
-    const sessionData: Prisma.SessionsCreateInput = {
+    const session_data: Prisma.SessionsCreateInput = {
       movie: {
         connect: {
           id: movie_id,
@@ -25,7 +25,7 @@ export class SessionsService {
       starts_at: new Date(starts_at),
       ends_at: new Date(ends_at),
     };
-    return await this.$sessionsRepository.create(sessionData);
+    return await this.$sessionsRepository.create(session_data);
   }
 
   async findAll(params: Prisma.SessionsFindManyArgs) {

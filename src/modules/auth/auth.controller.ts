@@ -23,7 +23,6 @@ export class AuthController {
         password: true,
       },
     });
-
     if (!user) throw new BadRequestException('Usuário não encontrado.');
     const pass_valid = await this.$hashService.compare(password, user.password);
     if (!pass_valid) throw new BadRequestException('Senha inválida.');

@@ -14,7 +14,7 @@ import { querySearchUser } from './dto/query-search-user';
 import { UsersController } from './users.controller';
 import { getUser } from 'src/decorators';
 import { IuserToken } from 'src/types';
-import { SkipAuth } from '../auth/auth.decorator';
+import { SkipAuth } from '../../decorators/auth.decorator';
 
 @Controller('users')
 export class UsersRouter {

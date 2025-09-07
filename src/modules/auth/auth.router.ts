@@ -1,8 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { SigninAuthDto } from './dto/signin-auth.dto';
 import { AuthController } from './auth.controller';
-import { skip } from 'node:test';
-import { SkipAuth } from './auth.decorator';
+import { SkipAuth } from 'src/decorators';
 
 @Controller('auth')
 export class AuthRouter {

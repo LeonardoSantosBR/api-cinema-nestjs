@@ -24,7 +24,6 @@ export class SessionSeatsController {
         deleted_at: null,
       },
     });
-
     if (seat_already_close.rows.length > 0)
       throw new BadRequestException(
         'Assentos para essa sessão já está ocupado.',
