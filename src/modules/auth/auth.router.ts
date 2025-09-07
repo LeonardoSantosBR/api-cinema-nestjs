@@ -1,14 +1,12 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller } from '@nestjs/common';
 import { SigninAuthDto } from './dto/signin-auth.dto';
 import { AuthController } from './auth.controller';
-import { SkipAuth } from 'src/decorators';
-
+import { auth_signin } from './decorators';
 @Controller('auth')
 export class AuthRouter {
   constructor(private readonly $authController: AuthController) {}
 
-  @SkipAuth()
-  @Post('signin')
+  @auth_signin()
   async signin(@Body() body: SigninAuthDto) {
     return await this.$authController.signin(body);
   }
