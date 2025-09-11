@@ -12,7 +12,9 @@ import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { querySearchMovies } from './dto/query-search-movies';
 import { MoviesController } from './movies.controller';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('filmes')
 @Controller('movies')
 export class MoviesRouter {
   constructor(private readonly $cinemasController: MoviesController) {}

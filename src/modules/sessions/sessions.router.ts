@@ -12,7 +12,9 @@ import { CreateSessionDto } from './dto/create-session.dto';
 import { UpdateSessionDto } from './dto/update-session.dto';
 import { querySearchSessions } from './dto/query-search-sessions';
 import { SessionsController } from './sessions.controller';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('sessões')
 @Controller('sessions')
 export class SessionsRouter {
   constructor(private readonly $sessionsController: SessionsController) {}

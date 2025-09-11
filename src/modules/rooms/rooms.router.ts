@@ -12,7 +12,9 @@ import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
 import { querySearchRooms } from './dto/query-search-rooms';
 import { RoomsController } from './rooms.controller';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('salas')
 @Controller('rooms')
 export class RoomsRouter {
   constructor(private readonly $roomsController: RoomsController) {}

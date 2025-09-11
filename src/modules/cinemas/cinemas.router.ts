@@ -10,7 +10,9 @@ import {
   cinemas_path,
   cinemas_post,
 } from './decorators';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('cinemas')
 @Controller('cinemas')
 export class CinemasRouter {
   constructor(private readonly $cinemasController: CinemasController) {}

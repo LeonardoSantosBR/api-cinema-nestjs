@@ -15,7 +15,9 @@ import { UsersController } from './users.controller';
 import { getUser } from 'src/decorators';
 import { IuserToken } from 'src/types';
 import { SkipAuth } from '../../decorators/auth.decorator';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('usuários')
 @Controller('users')
 export class UsersRouter {
   constructor(private readonly $usersController: UsersController) {}

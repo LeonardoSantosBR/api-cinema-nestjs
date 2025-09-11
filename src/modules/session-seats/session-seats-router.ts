@@ -12,7 +12,9 @@ import { querySearchSessionSeats } from './dto/query-search-session-seats';
 import { SessionSeatsController } from './session-seats.controller';
 import { getUser } from 'src/decorators';
 import { IuserToken } from 'src/types';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('assentos')
 @Controller('session-seats')
 export class SessionSeatsRouter {
   constructor(
