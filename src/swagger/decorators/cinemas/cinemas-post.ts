@@ -1,6 +1,6 @@
 import { applyDecorators, Post } from '@nestjs/common';
 import { ApiBody, ApiOperation } from '@nestjs/swagger';
-import { CreateCinemaDto } from '../dto/create-cinema.dto';
+import { CreateCinemaDto } from 'src/modules/cinemas/dto/create-cinema.dto';
 
 export function cinemas_post() {
   return applyDecorators(

@@ -9,7 +9,7 @@ import {
   cinemas_get_by_id,
   cinemas_path,
   cinemas_post,
-} from './decorators';
+} from '../../swagger/decorators/cinemas';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('cinemas')
