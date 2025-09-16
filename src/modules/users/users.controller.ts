@@ -32,12 +32,16 @@ export class UsersController {
     };
     const filter: any = users_filter(query);
     if (filter?.length) where.OR = filter;
-    const include: Prisma.UsersInclude = {};
+    const select: Prisma.UsersSelect = {
+      id: true,
+      name: true,
+      cpf: true,
+    };
 
     const data = await this.$usersService.findAll({
       where,
       orderBy,
-      include,
+      select,
       ...pagination_prisma(limit, page),
     });
 
