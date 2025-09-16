@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Param, Query } from '@nestjs/common';
 import { CreateSessionSeatDto } from './dto/create-session-seat.dto';
 import { querySearchSessionSeats } from './dto/query-search-session-seats';
 import { SessionSeatsController } from './session-seats.controller';
