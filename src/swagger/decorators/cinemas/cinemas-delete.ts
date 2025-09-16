@@ -1,4 +1,4 @@
-import { applyDecorators, Delete, Get } from '@nestjs/common';
+import { applyDecorators, Delete } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 
 export function cinemas_delete() {

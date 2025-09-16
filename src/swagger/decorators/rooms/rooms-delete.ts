@@ -1,9 +1,9 @@
 import { applyDecorators, Delete } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 
-export function movies_delete() {
+export function rooms_delete() {
   return applyDecorators(
     Delete('/:id'),
-    ApiOperation({ summary: 'Delete de movies.' }),
+    ApiOperation({ summary: 'Delete de rooms.' }),
   );
 }

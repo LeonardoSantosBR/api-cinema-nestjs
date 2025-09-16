@@ -1,7 +1,7 @@
 import { Body, Controller } from '@nestjs/common';
 import { SigninAuthDto } from './dto/signin-auth.dto';
 import { AuthController } from './auth.controller';
-import { auth_signin } from './decorators';
+import { auth_signin } from 'src/swagger/decorators/auth';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('autenticação')
