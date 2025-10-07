@@ -2,9 +2,12 @@ version: '3.8'
 
 services:
   api:
-    build: .
+    build:
+      context: .
+    image: leonardosantosdemelo/api-cinema:v3
+    container_name: api-v3
     env_file:
       - .env
     ports:
-      - '80:3000'
+      - '3000:3000'
     command: ['node', 'dist/main.js']
