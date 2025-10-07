@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    env_file:
+      - .env
+    ports:
+      - '80:3000'
+    command: ['node', 'dist/main.js']
