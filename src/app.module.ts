@@ -8,6 +8,7 @@ import { SessionSeatsModule } from './modules/session-seats/session-seats.module
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { AuthGuard } from './modules/auth/auth.guard';
+import { AdminsModule } from './modules/admins/admins.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { AuthGuard } from './modules/auth/auth.guard';
     SessionSeatsModule,
     UsersModule,
     AuthModule,
+    AdminsModule,
   ],
   controllers: [],
   providers: [

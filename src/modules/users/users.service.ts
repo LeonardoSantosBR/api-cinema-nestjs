@@ -56,7 +56,7 @@ export class UsersService {
     return await this.$usersRepository.remove(id);
   }
 
-  async format_sessions_rows(rows: Itickets[]) {
+  format_sessions_rows(rows: Itickets[]) {
     if (rows.length == 0) return [];
     const sessions: any = [];
     for (const r of rows) {
