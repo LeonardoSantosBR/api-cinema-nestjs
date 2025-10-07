@@ -6,20 +6,23 @@ import { v4 as uuidv4 } from 'uuid';
 export class AuthService {
   constructor(private $jwtService: JwtService) {}
 
-  async getCredentials({
+  getCredentials({
     id,
     name,
     cpf,
+    isAdmin,
   }: {
     id: number;
     name: string;
     cpf: string;
+    isAdmin: boolean;
   }) {
     const access_token = this.$jwtService.sign(
       {
         id,
         name,
         cpf,
+        isAdmin,
       },
       {
         secret: process.env.JWT_SECRET,
