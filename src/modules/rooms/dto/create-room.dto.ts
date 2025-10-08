@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsArray,
   IsBoolean,
@@ -8,14 +9,17 @@ import {
 } from 'class-validator';
 
 export class CreateSeatsDto {
+  @ApiProperty()
   @IsOptional()
   @IsNumber()
   seat_id: number;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsNumber()
   seat_number: number;
 
+  @ApiProperty()
   @IsOptional()
   @IsBoolean()
   is_accessible: boolean;
@@ -36,14 +40,17 @@ export class CreateRowsDto {
 }
 
 export class CreateRoomDto {
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   name: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsNumber()
   cinema_id: number;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsArray()
   rows: Array<CreateRowsDto>;
