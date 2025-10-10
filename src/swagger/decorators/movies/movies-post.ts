@@ -1,5 +1,7 @@
-import { applyDecorators, Post } from '@nestjs/common';
+import { applyDecorators, Post, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiOperation } from '@nestjs/swagger';
+import { Roles } from 'src/decorators/roles.decorator';
+import { RolesGuard } from 'src/modules/auth/roles.guard';
 import { CreateMovieDto } from 'src/modules/movies/dto/create-movie.dto';
 
 export function movies_post() {
@@ -7,5 +9,7 @@ export function movies_post() {
     Post(),
     ApiOperation({ summary: 'Create de movies.' }),
     ApiBody({ type: CreateMovieDto }),
+    UseGuards(RolesGuard),
+    Roles('admin'),
   );
 }

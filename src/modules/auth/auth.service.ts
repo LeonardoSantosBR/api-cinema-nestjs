@@ -10,19 +10,19 @@ export class AuthService {
     id,
     name,
     cpf,
-    isAdmin,
+    role,
   }: {
     id: number;
     name: string;
     cpf: string;
-    isAdmin: boolean;
+    role: string;
   }) {
     const access_token = this.$jwtService.sign(
       {
         id,
         name,
         cpf,
-        isAdmin,
+        role,
       },
       {
         secret: process.env.JWT_SECRET,

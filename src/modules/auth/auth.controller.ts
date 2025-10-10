@@ -32,7 +32,7 @@ export class AuthController {
       id: user.id,
       name: user.name,
       cpf: user.cpf,
-      isAdmin: false,
+      role: 'client',
     });
   }
   async signinAdmin(@Body() body: SigninAuthDto) {
@@ -56,7 +56,7 @@ export class AuthController {
       id: admins.id,
       name: admins.name,
       cpf: admins.cpf,
-      isAdmin: true,
+      role: 'admin',
     });
   }
 }

@@ -4,8 +4,8 @@ services:
   api:
     build:
       context: .
-    image: leonardosantosdemelo/api-cinema:v4
-    container_name: api-v4
+    image: leonardosantosdemelo/api-cinema:v5
+    container_name: api-v5
     env_file:
       - .env
     ports:
