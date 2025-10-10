@@ -26,9 +26,12 @@ export class UsersRouter {
   }
 
   @users_find_my_sessions_get_id()
-  async findMySessions(@getUser() user: IuserToken) {
+  async findMySessions(
+    @getUser() user: IuserToken,
+    @Query() querys: querySearchUser,
+  ) {
     const { id } = user;
-    return await this.$usersController.findMySessions(id);
+    return await this.$usersController.findMySessions(id, querys);
   }
 
   @users_get_by_id()
@@ -37,8 +40,8 @@ export class UsersRouter {
   }
 
   @users_get()
-  async findAll(@Query() query: querySearchUser) {
-    return await this.$usersController.findAll(query);
+  async findAll(@Query() querys: querySearchUser) {
+    return await this.$usersController.findAll(querys);
   }
 
   @users_patch()

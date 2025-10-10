@@ -21,16 +21,16 @@ export class MoviesController {
     return this.$moviesService.create(body);
   }
 
-  async findAll(query: querySearchMovies) {
-    const page = +query?.page;
-    const limit = +query?.limit;
-    const orderBy: Prisma.MoviesOrderByWithAggregationInput = query?.order ?? {
+  async findAll(querys: querySearchMovies) {
+    const page = +querys?.page;
+    const limit = +querys?.limit;
+    const orderBy: Prisma.MoviesOrderByWithAggregationInput = querys?.order ?? {
       created_at: 'desc',
     };
     const where: Prisma.MoviesWhereInput = {
       deleted_at: null,
     };
-    const filter: any = movies_filter(query);
+    const filter: any = movies_filter(querys);
     if (filter?.length) where.OR = filter;
     const include: Prisma.MoviesInclude = {
       sessions: {

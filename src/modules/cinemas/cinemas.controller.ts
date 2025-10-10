@@ -21,16 +21,16 @@ export class CinemasController {
     return this.$cinemasService.create(body);
   }
 
-  async findAll(query: querySearchCinemas) {
-    const page = +query?.page;
-    const limit = +query?.limit;
-    const orderBy: Prisma.CinemasOrderByWithAggregationInput = query?.order ?? {
+  async findAll(querys: querySearchCinemas) {
+    const page = +querys?.page;
+    const limit = +querys?.limit;
+    const orderBy: Prisma.CinemasOrderByWithAggregationInput = querys?.order ?? {
       created_at: 'desc',
     };
     const where: Prisma.CinemasWhereInput = {
       deleted_at: null,
     };
-    const filter: any = cinemas_filter(query);
+    const filter: any = cinemas_filter(querys);
     if (filter?.length) where.OR = filter;
     const include: Prisma.CinemasInclude = {
       rooms: {

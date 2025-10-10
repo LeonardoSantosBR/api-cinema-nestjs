@@ -28,8 +28,8 @@ export class RoomsRouter {
   }
 
   @rooms_get()
-  async findAll(@Query() query: querySearchRooms) {
-    return await this.$roomsController.findAll(query);
+  async findAll(@Query() querys: querySearchRooms) {
+    return await this.$roomsController.findAll(querys);
   }
 
   @rooms_patch()

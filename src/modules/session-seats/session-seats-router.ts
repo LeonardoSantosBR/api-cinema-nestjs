@@ -33,8 +33,8 @@ export class SessionSeatsRouter {
   }
 
   @session_seats_get()
-  async findAll(@Query() query: querySearchSessionSeats) {
-    return await this.$sessionSeatsController.findAll(query);
+  async findAll(@Query() querys: querySearchSessionSeats) {
+    return await this.$sessionSeatsController.findAll(querys);
   }
 
   @session_seats_delete()

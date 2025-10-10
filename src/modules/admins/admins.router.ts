@@ -28,8 +28,8 @@ export class AdminsRouter {
   }
 
   @admins_get()
-  async findAll(@Query() query: querySearchAdmin) {
-    return await this.$adminsController.findAll(query);
+  async findAll(@Query() querys: querySearchAdmin) {
+    return await this.$adminsController.findAll(querys);
   }
 
   @admins_patch()

@@ -5,6 +5,7 @@ import { UsersRepository } from './users.repository';
 import { Prisma, Users } from '@prisma/client';
 import { HashService } from 'src/services';
 import { Itickets } from 'src/types';
+import { querySearchUser } from './dto/query-search-user';
 
 @Injectable()
 export class UsersService {
@@ -33,8 +34,11 @@ export class UsersService {
     return { rows, count };
   }
 
-  async findMySessions(id: number) {
-    const rows: Itickets[] = await this.$usersRepository.findMySessions(id);
+  async findMySessions(id: number, querys: querySearchUser) {
+    const rows: Itickets[] = await this.$usersRepository.findMySessions(
+      id,
+      querys,
+    );
     return this.format_sessions_rows(rows);
   }
 

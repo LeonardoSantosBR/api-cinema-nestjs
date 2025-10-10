@@ -28,8 +28,8 @@ export class MoviesRouter {
   }
 
   @movies_get()
-  async findAll(@Query() query: querySearchMovies) {
-    return await this.$cinemasController.findAll(query);
+  async findAll(@Query() querys: querySearchMovies) {
+    return await this.$cinemasController.findAll(querys);
   }
 
   @movies_patch()

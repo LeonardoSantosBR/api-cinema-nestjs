@@ -2,6 +2,7 @@ import { Prisma } from '@prisma/client';
 import { PrismaServiceMysql } from 'src/database/prisma_mysql.service';
 import { Injectable } from '@nestjs/common';
 import { Itickets } from 'src/types';
+import { querySearchUser } from './dto/query-search-user';
 
 @Injectable()
 export class UsersRepository {
@@ -17,9 +18,13 @@ export class UsersRepository {
     return query;
   }
 
-  async findMySessions(id: number) {
-    const query: Itickets[] = 
-       await this.$prismaMysql.$queryRaw`
+  async findMySessions(id: number, querys: querySearchUser) {
+    let search = Prisma.empty;
+    if (querys.search) {
+      const st = `%${querys.search}%`;
+      search = Prisma.sql`AND m.name LIKE ${st}`;
+    }
+    const query: Itickets[] = await this.$prismaMysql.$queryRaw`
         SELECT 
             ss.id,
             ss.session_id,
@@ -35,7 +40,9 @@ export class UsersRepository {
             JOIN cinemas c ON r.cinema_id = c.id
             JOIN seats st ON ss.seat_id = st.id
             JOIN rows_room rr ON st.row_id = rr.id
-            WHERE ss.user_id = ${id} AND ss.deleted_at IS NULL AND sn.is_expired = false
+            WHERE ss.user_id = ${id} AND ss.deleted_at IS NULL 
+               AND sn.is_expired = false 
+               ${search ? search : Prisma.empty}
         `;
 
     return query;

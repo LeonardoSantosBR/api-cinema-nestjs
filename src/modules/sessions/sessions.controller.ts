@@ -29,18 +29,18 @@ export class SessionsController {
     return this.$sessionsService.create(body);
   }
 
-  async findAll(query: querySearchSessions) {
-    const page = +query?.page;
-    const limit = +query?.limit;
+  async findAll(querys: querySearchSessions) {
+    const page = +querys?.page;
+    const limit = +querys?.limit;
     const orderBy: Prisma.SessionsOrderByWithAggregationInput =
-      query?.order ?? {
+      querys?.order ?? {
         created_at: 'desc',
       };
     const where: Prisma.SessionsWhereInput = {
       is_expired: false,
       deleted_at: null,
     };
-    const filter: any = session_seats_filter(query);
+    const filter: any = session_seats_filter(querys);
     if (filter?.length) where.OR = filter;
     const select: Prisma.SessionsSelect = {
       id: true,

@@ -21,16 +21,16 @@ export class UsersController {
     return this.$usersService.create(body);
   }
 
-  async findAll(query: querySearchUser) {
-    const page = +query?.page;
-    const limit = +query?.limit;
-    const orderBy: Prisma.UsersOrderByWithAggregationInput = query?.order ?? {
+  async findAll(querys: querySearchUser) {
+    const page = +querys?.page;
+    const limit = +querys?.limit;
+    const orderBy: Prisma.UsersOrderByWithAggregationInput = querys?.order ?? {
       created_at: 'desc',
     };
     const where: Prisma.UsersWhereInput = {
       deleted_at: null,
     };
-    const filter: any = users_filter(query);
+    const filter: any = users_filter(querys);
     if (filter?.length) where.OR = filter;
     const select: Prisma.UsersSelect = {
       id: true,
@@ -48,8 +48,8 @@ export class UsersController {
     return pagination_helper(page, limit, data.count, data);
   }
 
-  async findMySessions(id: number) {
-    return this.$usersService.findMySessions(id);
+  async findMySessions(id: number, querys: querySearchUser) {
+    return this.$usersService.findMySessions(id, querys);
   }
 
   async findOne(id: string) {

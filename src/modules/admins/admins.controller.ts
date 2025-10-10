@@ -18,16 +18,16 @@ export class AdminsController {
     return this.$adminsService.create(body);
   }
 
-  async findAll(query: querySearchAdmin) {
-    const page = +query?.page;
-    const limit = +query?.limit;
-    const orderBy: Prisma.AdminsOrderByWithAggregationInput = query?.order ?? {
+  async findAll(querys: querySearchAdmin) {
+    const page = +querys?.page;
+    const limit = +querys?.limit;
+    const orderBy: Prisma.AdminsOrderByWithAggregationInput = querys?.order ?? {
       created_at: 'desc',
     };
     const where: Prisma.AdminsWhereInput = {
       deleted_at: null,
     };
-    const filter: any = admins_filter(query);
+    const filter: any = admins_filter(querys);
     if (filter?.length) where.OR = filter;
     const select: Prisma.AdminsSelect = {
       id: true,

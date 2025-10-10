@@ -22,16 +22,16 @@ export class RoomsController {
     return this.$roomsService.create(body);
   }
 
-  async findAll(query: querySearchRooms) {
-    const page = +query?.page;
-    const limit = +query?.limit;
-    const orderBy: Prisma.RoomsOrderByWithAggregationInput = query?.order ?? {
+  async findAll(querys: querySearchRooms) {
+    const page = +querys?.page;
+    const limit = +querys?.limit;
+    const orderBy: Prisma.RoomsOrderByWithAggregationInput = querys?.order ?? {
       created_at: 'desc',
     };
     const where: Prisma.RoomsWhereInput = {
       deleted_at: null,
     };
-    const filter: any = rooms_filter(query);
+    const filter: any = rooms_filter(querys);
     if (filter?.length) where.OR = filter;
     const include: Prisma.RoomsInclude = {
       cinema: {

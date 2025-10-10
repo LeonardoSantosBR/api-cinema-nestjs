@@ -28,8 +28,8 @@ export class SessionsRouter {
   }
 
   @sessions_get()
-  async findAll(@Query() query: querySearchSessions) {
-    return await this.$sessionsController.findAll(query);
+  async findAll(@Query() querys: querySearchSessions) {
+    return await this.$sessionsController.findAll(querys);
   }
 
   @sessions_patch()
