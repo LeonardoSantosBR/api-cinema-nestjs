@@ -10,6 +10,6 @@ export function sessions_patch() {
     ApiOperation({ summary: 'Patch de sessions.' }),
     ApiBody({ type: CreateSessionDto }),
     UseGuards(RolesGuard),
-    Roles('admin'),
+    Roles('ADMIN'),
   );
 }

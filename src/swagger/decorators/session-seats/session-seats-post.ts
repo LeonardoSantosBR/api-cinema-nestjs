@@ -10,6 +10,5 @@ export function session_seats_post() {
     ApiOperation({ summary: 'Create de session-seats.' }),
     ApiBody({ type: CreateSessionSeatDto }),
     UseGuards(RolesGuard),
-    Roles('client'),
   );
 }

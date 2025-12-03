@@ -10,6 +10,6 @@ export function sessions_post() {
     ApiOperation({ summary: 'Create de sessions.' }),
     ApiBody({ type: CreateSessionDto }),
     UseGuards(RolesGuard),
-    Roles('admin'),
+    Roles('ADMIN'),
   );
 }

@@ -8,6 +8,6 @@ export function sessions_delete() {
     Delete('/:id'),
     ApiOperation({ summary: 'Delete de sessions.' }),
     UseGuards(RolesGuard),
-    Roles('admin'),
+    Roles('ADMIN'),
   );
 }
