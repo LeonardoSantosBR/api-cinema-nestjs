@@ -9,6 +9,7 @@ import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { AuthGuard } from './modules/auth/auth.guard';
 import { AdminsModule } from './modules/admins/admins.module';
+import { RolesModule } from './modules/roles/roles.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { AdminsModule } from './modules/admins/admins.module';
     UsersModule,
     AuthModule,
     AdminsModule,
+    RolesModule,
   ],
   controllers: [],
   providers: [

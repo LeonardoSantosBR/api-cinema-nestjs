@@ -19,7 +19,14 @@ export class RolesGuard implements CanActivate {
 
     if (!requiredRoles) return true;
     const { user } = context.switchToHttp().getRequest();
-    if (!user || !requiredRoles.includes(user.role))
+
+    if (user.roles.includes('MASTER')) return true;
+    if (
+      !user ||
+      !requiredRoles.filter((rr) =>
+        user.roles?.some((ur) => rr == ur.toUpperCase()),
+      )
+    )
       throw new ForbiddenException('Acesso negado: permissão insuficiente');
 
     return true;

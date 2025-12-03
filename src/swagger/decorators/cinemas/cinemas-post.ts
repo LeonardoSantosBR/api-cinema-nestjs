@@ -10,6 +10,6 @@ export function cinemas_post() {
     ApiOperation({ summary: 'Create de cinemas.' }),
     ApiBody({ type: CreateCinemaDto }),
     UseGuards(RolesGuard),
-    Roles('admin'),
+    Roles('ADMIN'),
   );
 }

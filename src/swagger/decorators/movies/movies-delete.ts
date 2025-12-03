@@ -8,6 +8,6 @@ export function movies_delete() {
     Delete('/:id'),
     ApiOperation({ summary: 'Delete de movies.' }),
     UseGuards(RolesGuard),
-    Roles('admin'),
+    Roles('ADMIN'),
   );
 }

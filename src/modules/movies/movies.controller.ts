@@ -16,7 +16,9 @@ export class MoviesController {
   constructor(private readonly $moviesService: MoviesService) {}
 
   async create(body: CreateMovieDto) {
-    const movie = await this.findOneByName(body.name);
+    const movie = await this.$moviesService.findOne(undefined, {
+      where: { name: body.name },
+    });
     if (movie) throw new BadRequestException('Filme com esse nome já existe.');
     return this.$moviesService.create(body);
   }
@@ -65,10 +67,6 @@ export class MoviesController {
 
   async findOne(id: string) {
     return this.$moviesService.findOne(+id);
-  }
-
-  async findOneByName(name: string) {
-    return this.$moviesService.findOneByName(name);
   }
 
   async update(id: string, body: UpdateMovieDto) {

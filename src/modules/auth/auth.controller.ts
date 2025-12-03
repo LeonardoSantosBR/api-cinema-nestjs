@@ -1,4 +1,9 @@
-import { BadRequestException, Body, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { TypeUsersEnum } from 'src/enums';
 import { AuthService } from './auth.service';
 import { SigninAuthDto } from './dto/signin-auth.dto';
@@ -17,13 +22,22 @@ export class AuthController {
 
   async signin(@Body() body: SigninAuthDto) {
     const { cpf, password } = body;
-    const user = await this.$usersService.findOne(undefined, {
+    const user: any = await this.$usersService.findOne(undefined, {
       where: { cpf },
       select: {
         id: true,
         cpf: true,
         name: true,
         password: true,
+        userRoles: {
+          select: {
+            role: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
       },
     });
     if (!user) throw new UnauthorizedException('Usuário não encontrado.');
@@ -33,7 +47,9 @@ export class AuthController {
       id: user.id,
       name: user.name,
       cpf: user.cpf,
-      role: TypeUsersEnum.client,
+      roles: user.userRoles?.map((ur) => {
+        return ur.role.name;
+      }),
     });
   }
   async signinAdmin(@Body() body: SigninAuthDto) {
@@ -57,7 +73,6 @@ export class AuthController {
       id: admins.id,
       name: admins.name,
       cpf: admins.cpf,
-      role: TypeUsersEnum.admin,
     });
   }
 }

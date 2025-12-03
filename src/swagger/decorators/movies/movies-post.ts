@@ -10,6 +10,6 @@ export function movies_post() {
     ApiOperation({ summary: 'Create de movies.' }),
     ApiBody({ type: CreateMovieDto }),
     UseGuards(RolesGuard),
-    Roles('admin'),
+    Roles('ADMIN'),
   );
 }

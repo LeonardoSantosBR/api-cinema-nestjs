@@ -10,6 +10,6 @@ export function rooms_patch() {
     ApiOperation({ summary: 'Patch de rooms.' }),
     ApiBody({ type: CreateRoomDto }),
     UseGuards(RolesGuard),
-    Roles('admin'),
+    Roles('ADMIN'),
   );
 }

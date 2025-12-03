@@ -10,19 +10,19 @@ export class AuthService {
     id,
     name,
     cpf,
-    role,
+    roles,
   }: {
     id: number;
     name: string;
     cpf: string;
-    role: string;
+    roles?: string;
   }) {
     const access_token = this.$jwtService.sign(
       {
         id,
         name,
         cpf,
-        role,
+        roles,
       },
       {
         secret: process.env.JWT_SECRET,
@@ -35,6 +35,7 @@ export class AuthService {
     return {
       id,
       name,
+      roles,
       access_token,
       refresh_token,
     };

@@ -22,18 +22,8 @@ export class MoviesService {
     return { rows, count };
   }
 
-  async findOne(id: number, arg?: Prisma.MoviesFindFirstArgs) {
+  async findOne(id?: number, arg?: Prisma.MoviesFindFirstArgs) {
     const where = arg?.where || { id, deleted_at: null };
-    const query = await this.$moviesRepository.findOne({
-      where,
-      ...arg,
-    });
-
-    return query;
-  }
-
-  async findOneByName(name: string, arg?: Prisma.MoviesFindFirstArgs) {
-    const where = arg?.where || { name, deleted_at: null };
     const query = await this.$moviesRepository.findOne({
       where,
       ...arg,

@@ -64,7 +64,7 @@ export class UsersRepository {
     arg?: Prisma.UsersUpdateArgs,
   ) {
     const where = arg?.where || { id };
-    const query = await this.$prismaMysql.users.update({
+    await this.$prismaMysql.users.update({
       data: {
         ...data,
         updated_at: new Date(),
@@ -72,7 +72,7 @@ export class UsersRepository {
       where,
       ...arg,
     });
-    return query;
+    return true;
   }
 
   async remove(id: number) {

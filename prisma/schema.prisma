@@ -28,8 +28,30 @@ model Users {
   updated_at  DateTime?
   deleted_at  DateTime?
   seasonSeats SessionSeats[]
+  userRoles   UsersRoles[]
 
   @@map("users")
+}
+
+model UsersRoles {
+  id      Int   @id @default(autoincrement())
+  user_id Int
+  role_id Int
+  user    Users @relation(fields: [user_id], references: [id])
+  role    Roles @relation(fields: [role_id], references: [id])
+
+  @@map("users_roles")
+}
+
+model Roles {
+  id         Int          @id @default(autoincrement())
+  name       String       @unique
+  created_at DateTime     @default(now())
+  updated_at DateTime?
+  deleted_at DateTime?
+  userRoles  UsersRoles[]
+
+  @@map("roles")
 }
 
 model Cinemas {

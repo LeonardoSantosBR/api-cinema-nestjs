@@ -8,6 +8,6 @@ export function rooms_delete() {
     Delete('/:id'),
     ApiOperation({ summary: 'Delete de rooms.' }),
     UseGuards(RolesGuard),
-    Roles('admin'),
+    Roles('ADMIN'),
   );
 }

@@ -10,6 +10,6 @@ export function movies_patch() {
     ApiOperation({ summary: 'Patch de movies.' }),
     ApiBody({ type: CreateMovieDto }),
     UseGuards(RolesGuard),
-    Roles('admin'),
+    Roles('ADMIN'),
   );
 }

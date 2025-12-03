@@ -6,19 +6,30 @@ import { Prisma, Users } from '@prisma/client';
 import { HashService } from 'src/services';
 import { Itickets } from 'src/types';
 import { querySearchUser } from './dto/query-search-user';
+import { PrismaServiceMysql } from 'src/database/prisma_mysql.service';
 
 @Injectable()
 export class UsersService {
   constructor(
+    private readonly $prisma: PrismaServiceMysql,
     private readonly $usersRepository: UsersRepository,
     private readonly $hashService: HashService,
   ) {}
 
   async create(data: CreateUserDto) {
-    const { password, ...rest } = data;
+    const { password, roleIds, ...rest } = data;
     const hashed_password = await this.$hashService.encrypt(password);
     const user_dt: Prisma.UsersCreateInput = {
       ...rest,
+      userRoles: {
+        create: roleIds?.map((roleId) => ({
+          role: {
+            connect: {
+              id: roleId,
+            },
+          },
+        })),
+      },
       password: hashed_password,
     };
     return await this.$usersRepository.create(user_dt);
@@ -39,7 +50,7 @@ export class UsersService {
       id,
       querys,
     );
-    return this.format_sessions_rows(rows);
+    return this.formatSessionsRows(rows);
   }
 
   async findOne(id?: number, arg?: Prisma.UsersFindFirstArgs) {
@@ -53,14 +64,16 @@ export class UsersService {
   }
 
   async update(id: number, data: UpdateUserDto) {
-    return await this.$usersRepository.update(id, data);
+    const { roleIds, ...rest } = data;
+    if (roleIds) await this.updateRoleUsers(id, roleIds);
+    return await this.$usersRepository.update(id, { ...rest });
   }
 
   async remove(id: number) {
     return await this.$usersRepository.remove(id);
   }
 
-  format_sessions_rows(rows: Itickets[]) {
+  formatSessionsRows(rows: Itickets[]) {
     if (rows.length == 0) return [];
     const sessions: any = [];
     for (const r of rows) {
@@ -84,5 +97,32 @@ export class UsersService {
       }
     }
     return { sessions };
+  }
+
+  async updateRoleUsers(id: number, roleIds: Array<number>) {
+    await this.$prisma.$transaction(async (prisma) => {
+      await Promise.all([
+        await prisma.usersRoles.deleteMany({
+          where: {
+            user_id: id,
+          },
+        }),
+        await prisma.users.update({
+          where: { id },
+          data: {
+            userRoles: {
+              create: roleIds?.map((roleId) => ({
+                role: {
+                  connect: {
+                    id: roleId,
+                  },
+                },
+              })),
+            },
+          },
+        }),
+      ]);
+    });
+    return true;
   }
 }

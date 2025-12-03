@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { sanitizeCpf } from 'src/helpers/sanitize.cpf.helper';
 
 export class CreateUserDto {
@@ -19,4 +19,9 @@ export class CreateUserDto {
   @IsOptional()
   @IsString()
   password?: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsArray()
+  roleIds?: Array<number>;
 }
