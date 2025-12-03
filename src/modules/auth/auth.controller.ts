@@ -1,4 +1,5 @@
-import { BadRequestException, Body, Injectable } from '@nestjs/common';
+import { BadRequestException, Body, Injectable, UnauthorizedException } from '@nestjs/common';
+import { TypeUsersEnum } from 'src/enums';
 import { AuthService } from './auth.service';
 import { SigninAuthDto } from './dto/signin-auth.dto';
 import { UsersService } from '../users/users.service';
@@ -25,14 +26,14 @@ export class AuthController {
         password: true,
       },
     });
-    if (!user) throw new BadRequestException('Usuário não encontrado.');
+    if (!user) throw new UnauthorizedException('Usuário não encontrado.');
     const pass_valid = await this.$hashService.compare(password, user.password);
-    if (!pass_valid) throw new BadRequestException('Senha inválida.');
+    if (!pass_valid) throw new UnauthorizedException('Senha inválida.');
     return this.$authService.getCredentials({
       id: user.id,
       name: user.name,
       cpf: user.cpf,
-      role: 'client',
+      role: TypeUsersEnum.client,
     });
   }
   async signinAdmin(@Body() body: SigninAuthDto) {
@@ -56,7 +57,7 @@ export class AuthController {
       id: admins.id,
       name: admins.name,
       cpf: admins.cpf,
-      role: 'admin',
+      role: TypeUsersEnum.admin,
     });
   }
 }

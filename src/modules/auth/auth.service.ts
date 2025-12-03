@@ -33,6 +33,8 @@ export class AuthService {
     const refresh_token: string = uuidv4();
 
     return {
+      id,
+      name,
       access_token,
       refresh_token,
     };
