@@ -1,7 +1,7 @@
 import { Body, Controller } from '@nestjs/common';
 import { SigninAuthDto } from './dto/signin-auth.dto';
 import { AuthController } from './auth.controller';
-import { auth_admins_signin, auth_signin } from 'src/swagger/decorators/auth';
+import { auth_signin } from 'src/swagger/decorators/auth';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('autenticação')
@@ -12,10 +12,5 @@ export class AuthRouter {
   @auth_signin()
   async signin(@Body() body: SigninAuthDto) {
     return await this.$authController.signin(body);
-  }
-
-  @auth_admins_signin()
-  async signinAdmins(@Body() body: SigninAuthDto) {
-    return await this.$authController.signinAdmin(body);
   }
 }

@@ -7,18 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Admins {
-  id         Int       @id @default(autoincrement())
-  name       String
-  cpf        String    @unique
-  password   String    @db.LongText
-  created_at DateTime  @default(now())
-  updated_at DateTime?
-  deleted_at DateTime?
-
-  @@map("admins")
-}
-
 model Users {
   id          Int            @id @default(autoincrement())
   name        String

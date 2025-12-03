@@ -7,8 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { UsersRepository } from '../users/users.repository';
 import { PrismaServiceMysql } from 'src/database/prisma_mysql.service';
-import { AdminsService } from '../admins/admins.service';
-import { AdminsRepository } from '../admins/admins.repository';
+
 const providers = [
   AuthController,
   AuthService,
@@ -17,8 +16,6 @@ const providers = [
   UsersService,
   UsersRepository,
   PrismaServiceMysql,
-  AdminsService,
-  AdminsRepository,
 ];
 
 @Module({
