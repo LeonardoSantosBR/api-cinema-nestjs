@@ -1,4 +1,4 @@
-import { Module, UseGuards } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { CinemasModule } from './modules/cinemas/cinemas.module';
 import { RoomsModule } from './modules/rooms/rooms.module';
 import { MoviesModule } from './modules/movies/movies.module';
