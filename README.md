@@ -1,31 +1,31 @@
 # API Cinema
 
-API REST para gerenciamento de cinemas, salas, filmes, sessões e reserva de assentos. Construída com [NestJS](https://nestjs.com/), [Prisma](https://www.prisma.io/) e MySQL.
+REST API for managing cinemas, rooms, movies, sessions and seat reservations. Built with [NestJS](https://nestjs.com/), [Prisma](https://www.prisma.io/) and MySQL.
 
 ## Stack
 
 - **Runtime:** Node.js 20
 - **Framework:** NestJS 11
 - **ORM:** Prisma 6
-- **Banco:** MySQL
+- **Database:** MySQL
 - **Auth:** JWT (`@nestjs/jwt`) + bcrypt
-- **Validação:** `class-validator` / `class-transformer`
+- **Validation:** `class-validator` / `class-transformer`
 - **Docs:** Swagger (`@nestjs/swagger`)
-- **Agendamento:** `@nestjs/schedule` (expiração automática de sessões)
+- **Scheduling:** `@nestjs/schedule` (automatic session expiration)
 - **Container:** Docker / docker-compose
 
-## Funcionalidades
+## Features
 
-- Cadastro e autenticação de **usuários** (clientes) e **administradores** com papéis distintos
-- CRUD de **cinemas**, **salas**, **fileiras** e **assentos**
-- CRUD de **filmes** com classificação indicativa (`FREE`, `PLUS12`, `PLUS16`, `PLUS18`)
-- Criação e listagem de **sessões** com filtro por nome de filme
-- Reserva de **assentos por sessão** vinculada a um usuário
-- Expiração automática de sessões via job agendado
-- Soft delete em todos os recursos (`deleted_at`)
-- Controle de acesso por papel (`admin` / `client`) via guards
+- Registration and authentication of **users** (clients) and **administrators** with distinct roles
+- CRUD for **cinemas**, **rooms**, **rows** and **seats**
+- CRUD for **movies** with age rating (`FREE`, `PLUS12`, `PLUS16`, `PLUS18`)
+- Creation and listing of **sessions** with filtering by movie name
+- **Seat reservation per session** linked to a user
+- Automatic session expiration via scheduled job
+- Soft delete on every resource (`deleted_at`)
+- Role-based access control (`admin` / `client`) via guards
 
-## Modelo de dados
+## Data model
 
 ```
 Cinemas ──< Rooms ──< RowsRoom ──< Seats
@@ -35,55 +35,55 @@ Cinemas ──< Rooms ──< RowsRoom ──< Seats
                           └──< SessionSeats >── Users
 ```
 
-- Um **cinema** tem várias **salas**.
-- Cada **sala** possui **fileiras** (`RowsRoom`) identificadas por letra, e cada fileira contém **assentos** (`Seats`), com flag de acessibilidade.
-- Uma **sessão** associa um **filme** a uma **sala** com horários de início/fim.
-- Uma reserva (`SessionSeats`) liga um **usuário** a um **assento** de uma **sessão**.
+- A **cinema** has many **rooms**.
+- Each **room** has **rows** (`RowsRoom`) identified by a letter, and each row contains **seats** (`Seats`), with an accessibility flag.
+- A **session** links a **movie** to a **room** with start/end times.
+- A reservation (`SessionSeats`) links a **user** to a **seat** of a **session**.
 
-Enum de classificação:
+Rating enum:
 
 ```
 MovieClassification = FREE | PLUS12 | PLUS16 | PLUS18
 ```
 
-## Módulos
+## Modules
 
-| Módulo          | Responsabilidade                                  |
+| Module          | Responsibility                                    |
 | --------------- | ------------------------------------------------- |
-| `auth`          | Login de clientes e administradores, emissão JWT  |
-| `users`         | Gestão de clientes                                |
-| `admins`        | Gestão de administradores                         |
-| `cinemas`       | CRUD de cinemas                                   |
-| `rooms`         | CRUD de salas, fileiras e assentos                |
-| `movies`        | CRUD de filmes                                    |
-| `sessions`      | CRUD e busca de sessões (filtro por filme)        |
-| `session-seats` | Reserva de assentos em uma sessão                 |
+| `auth`          | Client and administrator login, JWT issuing       |
+| `users`         | Client management                                 |
+| `admins`        | Administrator management                          |
+| `cinemas`       | Cinema CRUD                                       |
+| `rooms`         | CRUD for rooms, rows and seats                    |
+| `movies`        | Movie CRUD                                        |
+| `sessions`      | Session CRUD and search (filter by movie)         |
+| `session-seats` | Seat reservation within a session                 |
 
-## Variáveis de ambiente
+## Environment variables
 
-Crie um arquivo `.env` na raiz:
+Create a `.env` file at the project root:
 
 ```env
 DATABASE_URL="mysql://user:password@localhost:3306/api_cinema"
-JWT_SECRET="sua-chave-secreta"
+JWT_SECRET="your-secret-key"
 PORT=3000
 ```
 
-## Como rodar
+## Running the project
 
 ### Local
 
 ```bash
-# instalar dependências
+# install dependencies
 npm install
 
-# gerar o Prisma Client
+# generate the Prisma Client
 npm run prisma-generate-mysql
 
-# aplicar o schema ao banco
+# apply the schema to the database
 npm run prisma-push-mysql
 
-# subir em modo desenvolvimento
+# start in development mode
 npm run start:dev
 ```
 
@@ -93,52 +93,52 @@ npm run start:dev
 docker-compose up --build
 ```
 
-A API ficará disponível em `http://localhost:3000`.
+The API will be available at `http://localhost:3000`.
 
-## Documentação Swagger
+## Swagger documentation
 
-Após subir a aplicação, acesse:
+Once the application is running, open:
 
 ```
 http://localhost:3000/api
 ```
 
-## Autenticação
+## Authentication
 
-A API usa JWT global via `AuthGuard`. Para autenticar:
+The API uses a global JWT `AuthGuard`. To authenticate:
 
-1. `POST /auth/signin` — login de cliente
-2. `POST /auth/signin/admin` — login de administrador
+1. `POST /auth/signin` — client login
+2. `POST /auth/signin/admin` — administrator login
 
-Use o token retornado no header `Authorization: Bearer <token>` nas demais requisições. Rotas protegidas por papel utilizam o `RolesGuard`.
+Send the returned token in the `Authorization: Bearer <token>` header on the remaining requests. Role-protected routes use the `RolesGuard`.
 
-## Scripts úteis
+## Useful scripts
 
-| Script                          | Descrição                              |
+| Script                          | Description                            |
 | ------------------------------- | -------------------------------------- |
-| `npm run start`                 | Inicia a API                           |
-| `npm run start:dev`             | Inicia em modo watch                   |
-| `npm run start:prod`            | Roda o build (`dist/main`)             |
-| `npm run build`                 | Compila o projeto                      |
+| `npm run start`                 | Starts the API                         |
+| `npm run start:dev`             | Starts in watch mode                   |
+| `npm run start:prod`            | Runs the build (`dist/main`)           |
+| `npm run build`                 | Compiles the project                   |
 | `npm run lint`                  | Lint + autofix                         |
-| `npm run format`                | Formata com Prettier                   |
-| `npm run test`                  | Testes unitários (Jest)                |
-| `npm run test:e2e`              | Testes end-to-end                      |
-| `npm run prisma-generate-mysql` | Gera o Prisma Client                   |
-| `npm run prisma-push-mysql`     | Sincroniza o schema com o banco        |
+| `npm run format`                | Formats with Prettier                  |
+| `npm run test`                  | Unit tests (Jest)                      |
+| `npm run test:e2e`              | End-to-end tests                       |
+| `npm run prisma-generate-mysql` | Generates the Prisma Client            |
+| `npm run prisma-push-mysql`     | Syncs the schema with the database     |
 
-## Estrutura do projeto
+## Project structure
 
 ```
 src/
 ├── app.module.ts
 ├── main.ts
-├── common/         # filtros, interceptors, utilitários compartilhados
-├── database/       # PrismaService e configuração de acesso a dados
-├── decorators/     # decorators customizados (ex.: @Roles)
+├── common/         # shared filters, interceptors and utilities
+├── database/       # PrismaService and data access configuration
+├── decorators/     # custom decorators (e.g. @Roles)
 ├── helpers/
-├── modules/        # módulos de domínio (auth, cinemas, movies, ...)
-├── services/       # serviços compartilhados (ex.: HashService)
+├── modules/        # domain modules (auth, cinemas, movies, ...)
+├── services/       # shared services (e.g. HashService)
 ├── swagger/
 └── types/
 ```
