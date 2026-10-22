@@ -9,6 +9,7 @@ import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { AuthGuard } from './modules/auth/auth.guard';
 import { AdminsModule } from './modules/admins/admins.module';
+import { HealthRouter } from './modules/health/health.router';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { AdminsModule } from './modules/admins/admins.module';
     AuthModule,
     AdminsModule,
   ],
-  controllers: [],
+  controllers: [HealthRouter],
   providers: [
     {
       provide: 'APP_GUARD',
