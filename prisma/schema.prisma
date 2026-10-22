@@ -130,6 +130,8 @@ model SessionSeats {
   seat        Seats     @relation(fields: [seat_id], references: [id])
   user        Users     @relation(fields: [user_id], references: [id])
 
+  @@unique([session_id, seat_id])
+
   @@map("session_seats")
 }
 
