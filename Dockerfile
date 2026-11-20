@@ -10,7 +10,7 @@ COPY prisma ./prisma
 RUN npm ci \
   && npx prisma generate
 
-COPY tsconfig.json tsconfig.build.json nest-cli.json eslint.config.mjs ./
+COPY tsconfig.json tsconfig.build.json nest-cli.json ./
 COPY src ./src
 
 RUN npm run build \

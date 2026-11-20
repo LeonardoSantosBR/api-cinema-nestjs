@@ -67,7 +67,12 @@ Create a `.env` file at the project root:
 DATABASE_URL="mysql://user:password@localhost:3306/api_cinema"
 JWT_SECRET="your-secret-key"
 PORT=3000
+CORS_ORIGIN=http://localhost:3000
 ```
+
+Em produção, `DATABASE_URL` e `JWT_SECRET` devem ser fornecidas pelo ambiente
+(por exemplo, AWS Secrets Manager ou Parameter Store). Não commite arquivos
+`.env` nem segredos no repositório.
 
 ## Running the project
 
@@ -86,6 +91,21 @@ npm run prisma-push-mysql
 # start in development mode
 npm run start:dev
 ```
+
+### Produção
+
+Para um banco de produção, use migrations versionadas em vez de `db push`:
+
+```bash
+npx prisma migrate dev --name initial
+npm run prisma-migrate-deploy
+npm run build
+npm run start:prod
+```
+
+`prisma migrate dev` deve ser executado durante o desenvolvimento para criar a
+pasta `prisma/migrations`, que deve ser versionada junto com o código. Em um
+deploy, execute somente `prisma migrate deploy`.
 
 ### Docker
 

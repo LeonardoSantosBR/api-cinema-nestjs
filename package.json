@@ -18,6 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
+    "prisma-migrate-deploy": "npx prisma migrate deploy --schema prisma/schema.prisma",
     "prisma-push-mysql": "npx prisma db push --schema prisma/schema.prisma",
     "prisma-generate-mysql": "npx prisma generate --schema prisma/schema.prisma"
   },
