@@ -13,8 +13,8 @@ RUN npm ci \
 COPY tsconfig.json tsconfig.build.json nest-cli.json ./
 COPY src ./src
 
-RUN npm run build \
-  && npm prune --omit=dev
+# O Prisma CLI é usado pelo serviço de migration do Docker Compose.
+RUN npm run build
 
 ENV NODE_ENV=production
 

@@ -1,13 +1,71 @@
-version: '3.8'
-
 services:
   api:
     build:
       context: .
-    image: leonardosantosdemelo/api-cinema:v5
-    container_name: api-v5
-    env_file:
-      - .env
+      dockerfile: Dockerfile
+    image: api-cinema:local
+    container_name: api-cinema-api
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      DATABASE_URL: mysql://root:0407@mysql:3306/apicinema
+      JWT_SECRET: ${JWT_SECRET:-local-development-secret}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:3000}
+      AWS_ENDPOINT_URL: http://floci:4566
+      AWS_REGION: ${AWS_REGION:-us-east-1}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-test}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-test}
     ports:
-      - '3000:3000'
-    command: ['node', 'dist/main.js']
+      - "3000:3000"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: api-cinema:local
+    container_name: api-cinema-migrate
+    environment:
+      DATABASE_URL: mysql://root:0407@mysql:3306/apicinema
+    depends_on:
+      mysql:
+        condition: service_healthy
+    command: ["npx", "prisma", "migrate", "deploy"]
+    restart: "no"
+
+  mysql:
+    image: mysql:8.4
+    container_name: api-cinema-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-0407}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-apicinema}
+    ports:
+      # Porta 3306 do host pode estar ocupada por um MySQL local.
+      # Entre containers, o MySQL continua disponível em mysql:3306.
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  floci:
+    image: floci/floci:latest
+    container_name: api-cinema-floci
+    ports:
+      - "4566:4566"
+    volumes:
+      - floci-data:/var/lib/floci
+    restart: unless-stopped
+
+volumes:
+  mysql-data:
+  floci-data:
